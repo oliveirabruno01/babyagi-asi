@@ -27,6 +27,16 @@ To use the script, you will need to follow these steps:
 7. Set the first task of the system in the FIRST_TASK variable.
 8. Run the script.
 
+# Examples
+``OBJECTIVE=I need to complete the first task
+FIRST_TASK=I must rickroll myself``
+
+``OBJECTIVE=I need to complete the first task
+FIRST_TASK=I must analyze my cognitive archictecture during my chain of thoughts and then in my 'answer:' I will write 10 examples of multi_step_objective-first_task pairs to showcase my capabilities, I must append the result in the ./output2.txt file.``
+
+``OBJECTIVE=Improve my prompts at ./prompts.py file
+FIRST_TASK=Plan what to do. I must create a initial end-to-end task list, which the final task will make our objective completed.``
+
 # Warning<a name="continous-script-warning"></a>
 This script is designed to run indefinitely until the task list is empty. So it can be in an endless loop, depending on the objective and first task.
 
