@@ -1,4 +1,4 @@
-import re, subprocess, platform, openai, prompts, consts, intelligent_tools
+import openai, prompts, consts
 from colorama import Fore
 from collections import deque
 from api import openai_call
@@ -16,11 +16,9 @@ class AutonomousAgent:
             self.tools,
             self.completed_tasks,
             self.task_id_counter,
-            self.create_task_tool,
-            self.priorization_tool,
             self.openai_call,
             self.task_list,
-        ) = (objective, [], prompts.chore_prompt, prompts.available_tools, [], 1, intelligent_tools.task_creation_agent, intelligent_tools.prioritization_agent, openai_call, deque([]))
+        ) = (objective, [], prompts.chore_prompt, prompts.available_tools, [], 1, openai_call, deque([]))
 
     def get_current_state(self):
         return {"self": [nome for nome in dir(self) if not nome.startswith("__")],
@@ -39,10 +37,10 @@ class AutonomousAgent:
             0.4,
             1000,
         )
-        print(changes)
+        # print(changes)
 
         answer = changes[changes.lower().index("answer:")+7:]
-        action_func = exec(answer, self.__dict__)
+        action_func = exec(answer.replace("```", ""), self.__dict__)
         result = self.action(self)
 
         self.completed_tasks.append(task)
@@ -73,6 +71,7 @@ if __name__ == "__main__":
                 + Fore.RESET
                 + "\n".join([f"{t['task_id']}: {t['task_name']}" for t in AI.task_list])
             )
+            AI.task_list = deque(AI.task_list)
             task = AI.task_list.popleft()
             print(Fore.BLUE + "\n*NEXT TASK*\n" + Fore.RESET)
             print(str(task["task_id"]) + ": " + task["task_name"])

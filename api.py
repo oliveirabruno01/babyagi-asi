@@ -9,7 +9,7 @@ def openai_call(prompt, temperature=0.4, max_tokens=200):
         },
         {"role": "assistant", "content": prompt},
     ]
-    print(prompt)
+    # print(prompt)
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo" if not consts.USE_GPT4 else "gpt-4",
         messages=messages,
