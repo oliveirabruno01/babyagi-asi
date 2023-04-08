@@ -64,32 +64,6 @@ def action(self):
 """
 
 
-def task_creation_agent(objective, task_list):
-    prompt = f"""
-I am TaskCreationTool
-As a task creation AI, I must create a new task/tasks to achieve this objective: {objective}.
-
-Current tasks are: {', '.join(task_list) if task_list is list else str(task_list)};
-
-Based on my objective, I must create one or more non-overlapping tasks for I complete later.
-I must return the task/tasks as an array.
-
-i.e: ["N: TaskNDescription"] or ["1: Task1Description",... "N: TaskNDescription"]
-
-I must answer in this format: chain of thoughs: [here I will put all my step-by-step reasoning, so I can choose my final answer] answer: [here I put the response list, I cannot add comments or write here, I'm allwowed just to write a python list as answer].
-My answer:
-"""
-    return prompt
-
-
-def prioritization_agent(objective, task_list, task_id_counter):
-    return f"""
-I am PrioritizationTool
-I am a task prioritization AI. My task is to clean the formatting and reprioritize the following tasks: {task_list}.
-I consider my ultimate objective: {objective}. I do not remove any tasks. I return the result as a numbered list starting with task number {task_id_counter+1}. If the current state is okay, I just write it again.
-"""
-
-
 def execution_agent(objective, completed_tasks, get_current_state, current_task):
     return f"""
 {chore_prompt}
