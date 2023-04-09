@@ -44,7 +44,8 @@ I recommend using this script in a virtual machine and always making a backup if
 
 
 # Backstory
-BabyAGI is a pared-down version of the original [Task-Driven Autonomous Agent](https://twitter.com/yoheinakajima/status/1640934493489070080?s=20) (Mar 28, 2023)
+BabyAGI is a pared-down version of the original [Task-Driven Autonomous Agent](https://twitter.com/yoheinakajima/status/1640934493489070080?s=20) (Mar 28, 2023, by @yoheynakajima)
+
 
 BASI is a modified version of BabyAGI created to show how LLMs can perform in the real world.
 
