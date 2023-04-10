@@ -9,12 +9,28 @@ This Python script is an example of a LLM-powered autonomous agent. The system u
 # How It Works<a name="how-it-works"></a>
 The script works by running an infinite loop that does the following steps:
 
-1-Write a function to finish the most relevant task (execution_agent);
-2-Read the changes and pass them to execution_agent again;
+1- Write a function to finish the most relevant task (execution_agent);
+2- Read the changes and pass them to execution_agent again (change_propagation_agent;
 
 # BASI tools
 
-Both agents share the same "personality" and the same chore prompt. Currently, I have removed the use of Pinecone but will be bringing it back into an agent to handle I/O on different babyagi memory types.
+Both agents share the same "personality" and the same chore prompt. 
+Currently, I have removed the use of Pinecone but will be bringing it back into an agent to handle I/O on different babyagi memory types.
+
+execution_agent tools:
+
+- openai_call
+- memory_agent (to retrieve and/or save information)
+
+memory_agent tools:
+- openai_call
+- get_ada_embedding
+- append_to_index
+- search_in_index
+- create_new_index (hardcoded disabled)
+
+Execution_agent and memory_agent perform actions by running arbitrary Python code;
+
 
 # How to Use<a name="how-to-use"></a>
 To use the script, you will need to follow these steps:
@@ -30,15 +46,20 @@ To use the script, you will need to follow these steps:
 8. Run the script.
 
 # Examples
-``OBJECTIVE=I need to complete the first task
-FIRST_TASK=I must rickroll myself``
+```
+OBJECTIVE=I need to complete the first task
+FIRST_TASK=I must rickroll myself
+```
 
-``OBJECTIVE=I need to complete the first task
-FIRST_TASK=I must analyze my cognitive archictecture during my chain of thoughts and then in my 'answer:' I will write 10 examples of multi_step_objective-first_task pairs to showcase my capabilities, I must append the result in the ./output2.txt file.``
+```
+OBJECTIVE=I need to complete the first task
+FIRST_TASK=I must analyze my cognitive archictecture during my chain of thoughts and then in my 'answer:' I will write 10 examples of multi_step_objective-first_task pairs to showcase my capabilities, I must append the result in the ./output2.txt file.
+```
 
-``OBJECTIVE=Improve my prompts at ./prompts.py file
-FIRST_TASK=Plan what to do. I must create a initial end-to-end task list, which the final task will make our objective completed.``
-
+```
+OBJECTIVE=Improve my prompts at ./prompts.py file
+FIRST_TASK=Plan what to do. I must create a initial end-to-end task list, which the final task will make our objective completed.
+```
 
 # Warning<a name="continous-script-warning"></a>
 This script is designed to run indefinitely until the task list is empty. So it can be in an endless loop, depending on the objective and first task.
