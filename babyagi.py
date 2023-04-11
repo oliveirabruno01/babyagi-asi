@@ -8,7 +8,7 @@ openai.api_key = consts.OPENAI_API_KEY
 
 
 def split_answer_and_cot(text):
-    start_index = text.lower().index("answer:") + 7
+    start_index = text.lower().index("answer:")+7
     end_index = text.lower().rfind("note:")
 
     cot = text[:start_index]
@@ -59,7 +59,6 @@ class AutonomousAgent:
 
     def repl_agent(self, current_task, changes):
         code, cot = split_answer_and_cot(changes)
-        print("\n\nREPL AGENT")
 
         while True:
             try:
@@ -76,6 +75,9 @@ class AutonomousAgent:
                 )
                 print(new_code)
                 code, cot = split_answer_and_cot(new_code)
+                action_func = exec(code, self.__dict__)
+                result = self.action(self)
+                return result
 
     def change_propagation_agent(self, _changes):
         return openai_call(

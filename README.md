@@ -3,8 +3,11 @@
 </h1>
 
 # Objective
-This Python script is an example of a LLM-powered autonomous agent. The system uses OpenAI API to create and execute tasks. 
+This Python script is an example of a LLM-powered autonomous agent. The system uses OpenAI API to create and execute tasks.
+The core idea of the project is to provide the assistant with the tools it needs to do any task - if it's smart enough. 
+It can arbitrarily execute code and control its own flow and memory, for a sufficiently intelligent agent, either by pre-training, fine-tuning or prompt-optimization, this should be enough (if it is possible at all)
 
+I have tested and am developing with only GPT-3
 
 # How It Works<a name="how-it-works"></a>
 The script works by running an infinite loop that does the following steps:
@@ -58,7 +61,7 @@ FIRST_TASK=I must analyze my cognitive archictecture during my chain of thoughts
 
 ```
 OBJECTIVE=Improve my prompts at ./prompts.py file
-FIRST_TASK=Plan what to do. I must create a initial end-to-end task list, which the final task will make our objective completed.
+FIRST_TASK=Plan what to do. I must create a initial end-to-end task list, which the final task will make my objective completed.
 ```
 
 # Warning<a name="continous-script-warning"></a>
