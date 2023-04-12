@@ -25,6 +25,7 @@ The execution_agent one-shot example is dynamically chosen according to the cont
 
 For example BASI can access and post a tweet in the account that is open in the browser thanks to a one-shot that teaches it to post on twitter using the tab key.
 
+Currently, I use gpt.3-5 to choose the one-shot from the execution_agent, but maybe in the future I'll use vector search for that.
 
 # BASI tools
 

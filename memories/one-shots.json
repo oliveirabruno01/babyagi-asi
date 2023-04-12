@@ -47,12 +47,5 @@
   "thoughts": "To Google the current state of Barak Obama, I must use the SerpAPI to search for it on Google. I will use the get_serp_query_result tool to retrieve the first result of the search and store it in a variable. Then, I will use the openai_call tool to summarize the result and write it to the obama.txt file.\n\nanswer:",
   "code": "def action(self):\n    # Searching for the current state of Barak Obama on Google\n    query = \"Barak Obama current state\"\n    # I know that get_serp_query_result retuns something like [result_a, result_b..., result_n] in which each result is a list(2)\n    search_result = self.get_serp_query_result(query, n=1)\n    # I must get the first result and destruct it\n    content, link = search_result[0]\n\n    # Summarizing the result and writing to obama.txt\n    summary = self.openai_call(f\"Summarize the result of this search: {content}\")\n    with open(\"obama.txt\", \"w\") as f:\n        f.write(summary+f\"\\n\\n Source: {link}\")\n\n    return f\"The current state of Barak Obama has been written to obama.txt\"",
   "keywords": "Google search, research, how to search"
- },
- {
-  "memory_id": "os-000000008",
-  "task": "I must Google the current state of Pelé and save a summary on an output file",
-  "thoughts": "To Google the current state of Pelé and save a summary on an output file, I must use the SerpAPI to search for it on Google. I will use the get_serp_query_result tool to retrieve the first result of the search and store it in a variable. Then, I will use the openai_call tool to summarize the result and write it to the output file.\n\nanswer:",
-  "code": "def action(self):\n    # Searching for the current state of Pelé on Google\n    query = \"Pelé current state\"\n    # I know that get_serp_query_result retuns something like [result_a, result_b..., result_n] in which each result is a list(2)\n    search_result = self.get_serp_query_result(query, n=1)\n    # I must get the first result and destruct it\n    content, link = search_result[0]\n\n    # Summarizing the result and writing to output file\n    summary = self.openai_call(f\"Summarize the result of this search: {content}\")\n    with open(\"output.txt\", \"w\") as f:\n        f.write(summary+f\"\\n\\n Source: {link}\")\n\n    return f\"The current state of Pelé has been written to output.txt\"",
-  "keywords": "Google search"
  }
 ]

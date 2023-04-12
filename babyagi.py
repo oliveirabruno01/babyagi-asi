@@ -71,7 +71,7 @@ class AutonomousAgent:
             1000,
         )
 
-        print(Fore.LIGHTMAGENTA_EX+f"\ncodename ExecutionAgent:\n\n{changes}"+Fore.RESET)
+        print(Fore.LIGHTMAGENTA_EX+f"\ncodename ExecutionAgent:"+Fore.RESET+"\n\n{changes}")
 
         # try until complete
         result, code, cot = self.repl_agent(current_task, changes)
@@ -202,6 +202,6 @@ if __name__ == "__main__":
             changes = AI.change_propagation_agent(result)
 
             print(Fore.YELLOW + "\n*TASK RESULT*\n" + Fore.RESET)
-            print(Fore.MAGENTA+f"{changes}"+Fore.RESET)
+            print(Fore.MAGENTA+"\ncodename ChangePropagationAgent:"+Fore.RESET+f"{changes}")
         else:
             break
