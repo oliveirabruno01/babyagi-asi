@@ -48,7 +48,7 @@ class AutonomousAgent:
         return hash
 
     def execution_agent(self, current_task):
-        one_shots_names_and_kw = [f"name: '{one_shot['task']}', keywords: '{one_shot['keywords']}';\n\n" for one_shot in one_shots]
+        one_shots_names_and_kw = [f"name: '{one_shot['memory_id']}', keywords: '{one_shot['keywords']}';\n\n" for one_shot in one_shots]
         completion = eval(split_answer_and_cot(openai_call(f"My current task is: {current_task}. "
                                       f"I must choose only the most relevant task between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
                                       f"I must write a list cointaining only the name of the most relevant one_shot. i.e '[\"one_shot example name\"]'."
@@ -62,7 +62,7 @@ class AutonomousAgent:
                 self.completed_tasks,
                 self.get_current_state,
                 current_task,
-                [one_shot for one_shot in one_shots if one_shot["task"] == one_shot_example_name][0] if one_shot_example_name is not None else ''
+                [one_shot for one_shot in one_shots if one_shot["memory_id"] == one_shot_example_name][0] if one_shot_example_name is not None else ''
             )
         # print(Fore.LIGHTCYAN_EX + prompt + Fore.RESET)
         changes = openai_call(
@@ -71,7 +71,7 @@ class AutonomousAgent:
             1000,
         )
 
-        print(Fore.LIGHTMAGENTA_EX+f"\ncodename ExecutionAgent:"+Fore.RESET+"\n\n{changes}")
+        print(Fore.LIGHTMAGENTA_EX+f"\n\ncodename ExecutionAgent:"+Fore.RESET+f"\n\n{changes}")
 
         # try until complete
         result, code, cot = self.repl_agent(current_task, changes)
@@ -80,11 +80,11 @@ class AutonomousAgent:
             {
                 "memory_id": "os-{0:09d}".format(len(one_shots)+1),
                 "task": current_task,
-                "thoughts": cot[cot.lower().index('chain of thoughts:')+18:].strip(),
+                "thoughts": cot[cot.lower().index('chain of thoughts:')+18:cot.lower().index('answer:')].strip(),
                 "code": code.strip().strip('\n\n'),
                 "keywords": eval(openai_call("I must analyze the following task name and action and write a list of keywords.\n"
                             f"Task name: {current_task};\nAction: {code};\n\n"
-                            f"> I must write a python list cointaing only one string,and inside this string one or more keywords i.e: ['search, person_a, using pyautogui, using execution_agent']\n"
+                            f"> I must write a python list cointaing only one string,and inside this string 3 or more keywords i.e: ['search, using pyautogui, using execution_agent, how to x, do y']\n"
                             f"My answer:", max_tokens=2000))[0]
             }
         )
@@ -202,6 +202,6 @@ if __name__ == "__main__":
             changes = AI.change_propagation_agent(result)
 
             print(Fore.YELLOW + "\n*TASK RESULT*\n" + Fore.RESET)
-            print(Fore.MAGENTA+"\ncodename ChangePropagationAgent:"+Fore.RESET+f"{changes}")
+            print(Fore.MAGENTA+"\n\ncodename ChangePropagationAgent:"+Fore.RESET+f"\n{changes}")
         else:
             break
