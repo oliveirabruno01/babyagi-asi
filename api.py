@@ -20,5 +20,4 @@ def openai_call(prompt, temperature=0.4, max_tokens=200, role="assistant"):
         n=1,
     )
     text = response.choices[0].message.content.strip()
-    print(text)
     return text

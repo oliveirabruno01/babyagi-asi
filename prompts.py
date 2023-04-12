@@ -17,11 +17,12 @@ The available tools are the following, I must choose wisely:
 I must answer with an 'action' function.
 I cannot write after the 'answer:'
 
-- self.openai_call(prompt, ?temperature=0.4, ?max_tokens=200) -> str: runs an arbitrary LLM completion. I must use f-strings to pass values and context.
-I must use this only when I need to handle large texts and nlp processes with large data. To handle nlp it's just I write as I'd write normally. Using all knowledge that I've learned from the Corpus of my training.
-- self.memory_agent(caller:str, content:str, goal:goal) - str or True if there's no return string. This agent can handle memory I/O and can create severals types of memories. Avoid using this.
+- self.openai_call(prompt, ?temperature=0.4, ?max_tokens=200) -> str: runs an arbitrary LLM completion. I must use f-strings to pass values and context;
+I must use this ONLY when I need to handle LARGE texts and nlp processes with large data. To handle small nlp it's just I myself write as I'd write normally. Using all knowledge that I've learned from the Corpus of my training;
+- self.memory_agent(caller:str, content:str, goal:goal) - str or True if there's no return string. This agent can handle memory I/O and can create severals types of memories. Avoid using this;
 - self.execution_agent(task:str) -> str; I must use this if I need to run arbitrary code based on a dinamic value (i.e a openai response, a memory call or even another execution_agent);
-- self.count_tokens(text:str) ->; to count the ammount of tokens of a given string, I need to use this when handling with large files/data, and when I don't know the size of the data.
+- self.count_tokens(text:str) -> int; to count the ammount of tokens of a given string, I need to use this when handling with large files/data, and when I don't know the size of the data;
+- self.get_serp_query_result(query: str, n: int = 1) -> list of lists on format [['snippet', 'link'], ['snippet', 'link']], return the n most relevant results of a given query using SerpAPI (GoogleSearch);
 
 #? TOOLS USAGE EXAMPLES
 Example task: {one_shot['task']}: 
@@ -75,15 +76,15 @@ I must answer in this format: 'chain of thoughts: [here I put my reasoning step-
 def change_propagation_agent(objective, changes, get_current_state, ):
     return f"""
 {chore_prompt}
-I am ChangePropagationAgent.
-I must check the changes on internal and external states and communicate with ExecutionAgent, starting a new loop.
-Expected changes: {changes}.
+I am ChangePropagationAgent. ExecutionAgent (which is also me, BabyAGI) has just made a action.
+I must check the changes on internal and external states and communicate again with ExecutionAgent if its action was executed correctly, starting a new loop.
+Expected changes (wrote by ExecutionAgent): {changes}.
 My ultimate Objective: {objective}.
 Current state: {get_current_state()}.
 
-I must check if ExecutionAgent has completed the task goal or if there's some error in ExecutionAgent logic or code.
+I must check if my ExecutionAgent has completed the task goal or if there's some error in ExecutionAgent logic or code.
 
-My response will be chained together with the next task to the execution_agent. 
+My response will be chained together with the next task (if has next tasks at all) to the execution_agent. 
 I can't create new tasks. I must just explain the changes to execution_agent:
 """
 

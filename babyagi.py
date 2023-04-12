@@ -1,4 +1,5 @@
 import openai, prompts, consts, pinecone, os, subprocess, tiktoken, json
+from tools import serp_api
 from colorama import Fore
 from collections import deque
 from api import openai_call
@@ -33,7 +34,8 @@ class AutonomousAgent:
             self.task_list,
             self.indexes,
             self.focus,
-        ) = (objective, [], prompts.chore_prompt, [], 1, openai_call, deque([]), {}, "")
+            self.get_serp_query_result
+        ) = (objective, [], prompts.chore_prompt, [], 1, openai_call, deque([]), {}, "", serp_api.get_serp_query_result)
 
     def get_current_state(self):
         # filter properties to avoid adiction
@@ -47,14 +49,13 @@ class AutonomousAgent:
 
     def execution_agent(self, current_task):
         one_shots_names_and_kw = [f"name: '{one_shot['task']}', keywords: '{one_shot['keywords']}';\n\n" for one_shot in one_shots]
-        print(one_shots_names_and_kw)
         completion = eval(split_answer_and_cot(openai_call(f"My current task is: {current_task}. "
                                       f"I must choose only the most relevant task between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
                                       f"I must write a list cointaining only the name of the most relevant one_shot. i.e '[\"one_shot example name\"]'."
-                                      f"I must choose one one_shot name of the list above. I must answer in the format 'CHAIN OF THOUGHTS: here I reason;\nANSWER: [empty list or with one string]';"
+                                      f"I must choose one one_shot name of the list above. I must answer in the format 'CHAIN OF THOUGHTS: here I briefly reason;\nANSWER: [empty list or with one string]';"
                                       f"My answer:").strip("'"))[0])
+        print(f"\nChosen one-shot example: {completion}\n")
         one_shot_example_name = completion[0] if len(completion) > 0 else None
-        print(one_shot_example_name)
 
         prompt = prompts.execution_agent(
                 self.objective,
@@ -63,12 +64,14 @@ class AutonomousAgent:
                 current_task,
                 [one_shot for one_shot in one_shots if one_shot["task"] == one_shot_example_name][0] if one_shot_example_name is not None else ''
             )
-        print(Fore.LIGHTCYAN_EX + prompt + Fore.RESET)
+        # print(Fore.LIGHTCYAN_EX + prompt + Fore.RESET)
         changes = openai_call(
             prompt,
             0.4,
             1000,
         )
+
+        print(Fore.LIGHTMAGENTA_EX+f"\ncodename ExecutionAgent:\n\n{changes}"+Fore.RESET)
 
         # try until complete
         result, code, cot = self.repl_agent(current_task, changes)
@@ -82,17 +85,18 @@ class AutonomousAgent:
                 "keywords": eval(openai_call("I must analyze the following task name and action and write a list of keywords.\n"
                             f"Task name: {current_task};\nAction: {code};\n\n"
                             f"> I must write a python list cointaing only one string,and inside this string one or more keywords i.e: ['search, person_a, using pyautogui, using execution_agent']\n"
-                            f"My answer:"))[0]
+                            f"My answer:", max_tokens=2000))[0]
             }
         )
 
         with open("memories/one-shots.json", 'w') as f:
-            f.write(json.dumps(one_shots, indent=True))
+            f.write(json.dumps(one_shots, indent=True, ensure_ascii=False))
 
         return changes + f"; {result}"
 
     def repl_agent(self, current_task, changes):
         code, cot = split_answer_and_cot(changes)
+        ct = 1
 
         while True:
             try:
@@ -100,6 +104,9 @@ class AutonomousAgent:
                 result = self.action(self)
                 return result, code, cot
             except Exception as e:
+                print(Fore.RED + f"\n\nFIXING AN ERROR: {e}\n" + Fore.RESET + consts.OBJECTIVE)
+                print(f"{ct} try")
+
                 prompt = prompts.fix_agent(current_task, code, cot, e)
                 print(prompt)
                 new_code = openai_call(
@@ -107,11 +114,16 @@ class AutonomousAgent:
                     0.4,
                     1000,
                 )
-                print(new_code)
-                code, cot = split_answer_and_cot(new_code)
-                action_func = exec(code, self.__dict__)
-                result = self.action(self)
-                return result, code, cot
+                print(new_code, end="\n")
+                try:
+                    code, cot = split_answer_and_cot(new_code)
+                    action_func = exec(code, self.__dict__)
+                    result = self.action(self)
+                    return result, code, cot
+                except Exception as e:
+                    pass
+            ct += 1
+
 
     def change_propagation_agent(self, _changes):
         return openai_call(
@@ -133,17 +145,13 @@ class AutonomousAgent:
     # Function to query records from the Pinecone index
     def search_in_index(self, index_name, query, top_k=1000):
         results = self.indexes[index_name].query(query, top_k=top_k, include_metadata=True)
-        print(results)
         response = [f"{task.metadata['task']}:\n{task.metadata['result']}\n;" for task in results.matches]
-        print(response)
         return response
 
     # Get embedding for the text
     def get_ada_embedding(self, text):
         text = text.replace("\n", " ")
-        print(text)
         vector = openai.Embedding.create(input=[text], model="text-embedding-ada-002")["data"][0]["embedding"]
-        print(vector)
         return vector
 
     def append_to_index(self, content, index_name):
@@ -194,5 +202,6 @@ if __name__ == "__main__":
             changes = AI.change_propagation_agent(result)
 
             print(Fore.YELLOW + "\n*TASK RESULT*\n" + Fore.RESET)
+            print(Fore.MAGENTA+f"{changes}"+Fore.RESET)
         else:
             break

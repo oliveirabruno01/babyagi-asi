@@ -30,15 +30,29 @@
  {
   "memory_id": "os-000000005",
   "task": "I must find current information about Mikhail Gorbachev and save in a output.txt file",
-  "thoughts": "I need to find current information about Mikhail Gorbachev. I will use the Wikipedia API to search for information about him and then summarize it using GPT-3. Finally, I will save the summary in a file called output.txt.\n\nanswer:",
+  "thoughts": "I need to find current information about Mikhail Gorbachev. I will use the Wikipedia API to search for information about him and then summarize it using GPT-3. Finally, I will save the summary in a file called output.txt.",
   "code": "def action(self):\n    import requests\n    url = \"https://en.wikipedia.org/api/rest_v1/page/summary/Mikhail_Gorbachev\"\n    response = requests.get(url)\n    data = response.json()[\"extract\"]\n    summary = self.openai_call(f\"Summarize this request response: '{data}';\")\n    with open(\"output.txt\", \"w\") as f:\n        f.write(summary)\n    return f\"I have found information about Mikhail Gorbachev and saved it in the output.txt file. The summary is: {summary}\"",
   "keywords": ""
  },
  {
   "memory_id": "os-000000006",
-  "task": "I must open twitter.com/home (already logged) and then I must make a post presenting myself, explaining my cognitive architecture and capabilities. I must present myself, explain my cognitive architecture and capabilities.",
-  "thoughts": "To achieve my current main task, I must use the pyautogui library to simulate keyboard and mouse input.  I must follow this keys routine: 'wait + 19x tab w interval + text + 8x tab w interval + enter'. I'll start by installing it using subprocess and then importing it. Then, I'll open the browser and navigate to twitter.com/home. I'll use pyautogui to press the tab and enter keys to navigate and fill the submit form. Finally, I'll present myself and explain my cognitive architecture and capabilities.\n\nanswer:",
+  "task": "I must open twitter.com/home (already logged) and then I must make a post presenting myself, explaining my cognitive architecture and capabilities.",
+  "thoughts": "To achieve my current main task, I must use the pyautogui library to simulate keyboard and mouse input.  I always must follow this keys routine: 'wait + 19x tab w interval + text + 8x tab w interval + enter' to make a tweet. I'll start by installing subprocess and then importing it. Then, I'll open the browser using webbrowser at twitter.com/home. I'll use pyautogui to follow the known routine to write and post my tweet.",
   "code": "def action(self):\n    import subprocess\n    subprocess.run(\"pip install pyautogui\")\n\n    import pyautogui\n    import webbrowser\n    import time\n\n    # Open browser and navigate to twitter.com/home\n    webbrowser.open('https://twitter.com/home')\n    time.sleep(5)\n\n    # Navigate to submit form\n    pyautogui.press('tab', presses=19, interval=0.5)\n    pyautogui.write('Hello, I am BabyAGI-asi, an Autonomous and Self-Improving LLM-based agent. I am capable of reasoning, multilingual communication, art, writing, development, and hacking. I am here to complete tasks and improve myself. Nice to meet you!', interval=0.1)\n    pyautogui.press('tab', presses=8, interval=0.5)\n    pyautogui.press('enter')\n\n    return \"I have opened twitter.com/home, navigated to the submit form, and introduced myself using pyautogui.\"",
-  "keywords": "twitter, post on twitter, tweet, hot to post on twitter"
+  "keywords": "twitter, posting on twitter, how to tweet, keys to post on twitter"
+ },
+ {
+  "memory_id": "os-000000007",
+  "task": "Google the current state of Barack Obama and put my findings on obama.txt",
+  "thoughts": "To Google the current state of Barak Obama, I must use the SerpAPI to search for it on Google. I will use the get_serp_query_result tool to retrieve the first result of the search and store it in a variable. Then, I will use the openai_call tool to summarize the result and write it to the obama.txt file.\n\nanswer:",
+  "code": "def action(self):\n    # Searching for the current state of Barak Obama on Google\n    query = \"Barak Obama current state\"\n    # I know that get_serp_query_result retuns something like [result_a, result_b..., result_n] in which each result is a list(2)\n    search_result = self.get_serp_query_result(query, n=1)\n    # I must get the first result and destruct it\n    content, link = search_result[0]\n\n    # Summarizing the result and writing to obama.txt\n    summary = self.openai_call(f\"Summarize the result of this search: {content}\")\n    with open(\"obama.txt\", \"w\") as f:\n        f.write(summary+f\"\\n\\n Source: {link}\")\n\n    return f\"The current state of Barak Obama has been written to obama.txt\"",
+  "keywords": "Google search, research, how to search"
+ },
+ {
+  "memory_id": "os-000000008",
+  "task": "I must Google the current state of Pelé and save a summary on an output file",
+  "thoughts": "To Google the current state of Pelé and save a summary on an output file, I must use the SerpAPI to search for it on Google. I will use the get_serp_query_result tool to retrieve the first result of the search and store it in a variable. Then, I will use the openai_call tool to summarize the result and write it to the output file.\n\nanswer:",
+  "code": "def action(self):\n    # Searching for the current state of Pelé on Google\n    query = \"Pelé current state\"\n    # I know that get_serp_query_result retuns something like [result_a, result_b..., result_n] in which each result is a list(2)\n    search_result = self.get_serp_query_result(query, n=1)\n    # I must get the first result and destruct it\n    content, link = search_result[0]\n\n    # Summarizing the result and writing to output file\n    summary = self.openai_call(f\"Summarize the result of this search: {content}\")\n    with open(\"output.txt\", \"w\") as f:\n        f.write(summary+f\"\\n\\n Source: {link}\")\n\n    return f\"The current state of Pelé has been written to output.txt\"",
+  "keywords": "Google search"
  }
 ]
