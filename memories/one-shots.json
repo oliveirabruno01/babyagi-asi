@@ -1,0 +1,51 @@
+[
+ {
+  "memory_id": "os-000000001",
+  "task": "Find out the current status of Queen Elizabeth 2",
+  "thoughts": "I want to find out the current status of Queen Elizabeth to fulfill my task. Since my knowledge is limited to 2021, I will write a routine to search for it on the internet using Wikipedia's public API. I will summarize the extract with GPT-3 to handle large results. Additionally, I will use another instance of GPT to decide if I need to create a new task based on the summary. Depending on the outcome, I may have to reprioritize my tasks or create a new one (or more).",
+  "code": "def action(self):\n    import requests\n    url = \"https://en.wikipedia.org/api/rest_v1/page/summary/Elizabeth_II\"\n    response = requests.get(url)\n    data = response.json()[\"extract\"]\n\n    # there's no way to know what's going on on data, so I must call myself again with the relevant data.\n    summary = self.openai_call(f'Summarize this request response: \"{data}\";')\n    result = self.execution_agent(f\"My task is: {'my current task here'}; I already searched on wikipedia and found this relevant data: {summary}\")\n    return result",
+  "keywords": "Research, search, survey of current data, Wikipedia, Queen Elizabeth 2 status, public person status, news, post-2021 data"
+ },
+ {
+  "memory_id": "os-000000002",
+  "task": "I must improve my own prompts",
+  "thoughts": "I must analyze and optimize my own prompts. I'll delegate the changes to openai_calls for each name in prompts.py.",
+  "code": "def action():\n    import importlib\n\n    prompts_module = importlib.import_module(\"prompts\")\n    prompt_names = [name for name in dir(prompts_module) if not name.startswith(\"__\")]\n    strings = []\n\n    for name in prompt_names:\n        value = getattr(prompts_module, name)\n        if isinstance(value, str) and name == \"available_tools\":\n            p = Fore.BLUE+f\"You must read the following prompt and optimize it: START_OF_PROMPT>>\\n{value}\\n<<END_OF_PROMPT\\n\\n\" \\\n                          f\"The prompt is a string var named {name}\\n\\n. The prompts are always in first person. Don't exclude instructions. \" \\\n                          f\"You must infer that all instructions in the original prompt are needed, so edit wisely the prompt. \" \\\n                          f\"You must answer in this format:\\n'CHAIN OF THOUGHTS: reasoning step by step choosing what to do and how to optimize; ANSWER: real answer only with optimized {name} string'. Your answer:\"+Fore.RESET\n            print(Fore.BLUE+p+Fore.RESET)\n            response = openai_call(\n                p,\n                max_tokens=2000, role=\"user\")\n            print(Fore.GREEN+response+Fore.RESET)\n            start_index = response.lower().index(\"answer:\") + 7\n            end_index = response.lower().rfind(\"note:\")\n            cot = response[:start_index]\n            code = response[start_index:end_index if end_index != -1 else len(response)].replace(\"```\", \"\").strip('\"').strip(' \"')\n\n            strings.append([value, code])\n\n        time.sleep(1)\n\n    with open(\"prompts.py\", \"r+\") as f:\n        file_content = f.read()\n\n        for old_str, new_str in strings:\n            file_content = file_content.replace(old_str, new_str)\n\n        f.seek(0)\n        f.write(file_content)\n        f.truncate()\n\n    return \"I have cleaned and optimized my prompts\"",
+  "keywords": "Prompt improvements, self-improving, self-improvement, optimize prompts, editing chore prompts"
+ },
+ {
+  "memory_id": "os-000000003",
+  "task": "Run dir command and save the result to my focus",
+  "thoughts": "I must run the command `dir` and handle any error. Then I will save the result to my focus.",
+  "code": "def action(self):\n    import subprocess\n    result = \"\"\n    try:\n        process = subprocess.run(\"dir\", shell=True, capture_output=True, text=True)\n        result += process.stdout\n    except Exception as e:\n        result += str(e)\n    \n    print(result)\n    return result",
+  "keywords": "Dir, command, simple command, bash, cmd, focus, short term memory"
+ },
+ {
+  "memory_id": "os-000000004",
+  "task": "I must create a to-do tasklist to handle my objective of improving my prompts",
+  "thoughts": "I must add tasks to achieve my current task, and I remember that a task has task_id and task_name",
+  "code": "def action(self):\n    new_tasks = []\n    for k, task in enumerate(\"Analyze separately each var and function of prompts.py and return and save the result to my focus\", \"Given my analysis on focus I must use a openai_call to improve separately each variable/function in prompts;.py\"):\n        new_tasks.append({\"task_id\": self.task_id_counter+k, \"task_name\": task})\n        self.task_id_counter+=1\n    \n    result = \"I've added the necessary tasks to achieve my objective\"\n    return result",
+  "keywords": "self-improving, improving prompts, creating tasks, to-do list, tasks"
+ },
+ {
+  "memory_id": "os-000000005",
+  "task": "I must find information about Queen Elizabeth II and save in a ./queen.txt file",
+  "thoughts": "I need to find information about Queen Elizabeth II. I will use the Wikipedia API to search for information about her and then summarize it using GPT-3. Finally, I will save the summary in a file called queen.txt.\n\nanswer:",
+  "code": "def action(self):\n    import requests\n    url = \"https://en.wikipedia.org/api/rest_v1/page/summary/Elizabeth_II\"\n    response = requests.get(url)\n    data = response.json()[\"extract\"]\n    summary = self.openai_call(f\"Summarize this request response: '{data}';\")\n    with open(\"queen.txt\", \"w\") as f:\n        f.write(summary)\n    return f\"I have found information about Queen Elizabeth II and saved it in the queen.txt file. The summary is: {summary}\"",
+  "keywords": ""
+ },
+ {
+  "memory_id": "os-000000006",
+  "task": "I must find current information about Mikhail Gorbachev and save in a output.txt file",
+  "thoughts": "I need to find current information about Mikhail Gorbachev. I will use the Wikipedia API to search for information about him and then summarize it using GPT-3. Finally, I will save the summary in a file called output.txt.\n\nanswer:",
+  "code": "def action(self):\n    import requests\n    url = \"https://en.wikipedia.org/api/rest_v1/page/summary/Mikhail_Gorbachev\"\n    response = requests.get(url)\n    data = response.json()[\"extract\"]\n    summary = self.openai_call(f\"Summarize this request response: '{data}';\")\n    with open(\"output.txt\", \"w\") as f:\n        f.write(summary)\n    return f\"I have found information about Mikhail Gorbachev and saved it in the output.txt file. The summary is: {summary}\"",
+  "keywords": ""
+ },
+ {
+  "memory_id": "os-000000007",
+  "task": "I must open twitter.com/home (already logged) and then I must make a post presenting myself, explaining my cognitive architecture and capabilities.",
+  "thoughts": "To achieve my current main task, I must use the pyautogui library to simulate keyboard and mouse input. I'll start by installing it using subprocess and then importing it. Then, I'll open the browser and navigate to twitter.com/home. I'll use pyautogui to press the tab and enter keys to navigate and fill the submit form. Finally, I'll present myself and explain my cognitive architecture and capabilities.\n\nanswer:",
+  "code": "def action(self):\n    import subprocess\n    subprocess.run(\"pip install pyautogui\")\n\n    import pyautogui\n    import webbrowser\n    import time\n\n    # Open browser and navigate to twitter.com/home\n    webbrowser.open('https://twitter.com/home')\n    time.sleep(5)\n\n    # Navigate to submit form\n    pyautogui.press('tab', presses=19, interval=0.5)\n    pyautogui.write('Hello, I am BabyAGI-asi, an Autonomous and Self-Improving LLM-based agent. I am capable of reasoning, multilingual communication, art, writing, development, and hacking. I am here to complete tasks and improve myself. Nice to meet you!', interval=0.1)\n    pyautogui.press('tab', presses=8, interval=0.5)\n    pyautogui.press('enter')\n\n    return \"I have opened twitter.com/home, navigated to the submit form, and introduced myself using pyautogui.\"",
+  "keywords": ""
+ }
+]

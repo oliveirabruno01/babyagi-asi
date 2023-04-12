@@ -1,10 +1,15 @@
-import openai, prompts, consts, pinecone
+import openai, prompts, consts, pinecone, os, subprocess, tiktoken, json
 from colorama import Fore
 from collections import deque
 from api import openai_call
 
 print(Fore.RED + "\nOBJECTIVE\n" + Fore.RESET + consts.OBJECTIVE)
 openai.api_key = consts.OPENAI_API_KEY
+
+encoding = tiktoken.encoding_for_model("gpt-3.5-turbo" if not consts.USE_GPT4 else "gpt-4")
+
+with open('memories/one-shots.json', 'r') as f:
+    one_shots = json.loads(f.read())
 
 
 def split_answer_and_cot(text):
@@ -22,30 +27,43 @@ class AutonomousAgent:
             self.objective,
             self.memory,
             self.chore_prompt,
-            self.tools,
             self.completed_tasks,
             self.task_id_counter,
             self.openai_call,
             self.task_list,
             self.indexes,
             self.focus,
-        ) = (objective, [], prompts.chore_prompt, prompts.available_tools, [], 1, openai_call, deque([]), {}, "")
+        ) = (objective, [], prompts.chore_prompt, [], 1, openai_call, deque([]), {}, "")
 
     def get_current_state(self):
-        return {"self": [nome for nome in dir(self) if not nome.startswith("__")],
+        # filter properties to avoid adiction
+        hash = {"self": [nome for nome in dir(self) if not nome.startswith("__") and nome not in "search_in_index get_ada_embedding append_to_index memory_agent repl_agent task_list memory focus indexes"],
                 "To-do tasks list": self.task_list,
-                "Available indexes (pinecone memory)": self.indexes,
+                "Available indexes": [index for index in self.indexes.keys()],
                 "self.memory": self.memory,
-                "self.focus": self.focus}
+                "self.focus": self.focus,
+                "current dir": os.listdir(os.getcwd())}
+        return hash
 
     def execution_agent(self, current_task):
+        one_shots_names_and_kw = [f"name: '{one_shot['task']}', keywords: '{one_shot['keywords']}';\n\n" for one_shot in one_shots]
+        print(one_shots_names_and_kw)
+        completion = eval(split_answer_and_cot(openai_call(f"My current task is: {current_task}. "
+                                      f"I must choose only the most relevant task between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
+                                      f"I must write a list cointaining only the name of the most relevant one_shot. i.e '[\"one_shot example name\"]'."
+                                      f"I must choose one one_shot name of the list above. I must answer in the format 'CHAIN OF THOUGHTS: here I reason;\nANSWER: [empty list or with one string]';"
+                                      f"My answer:").strip("'"))[0])
+        one_shot_example_name = completion[0] if len(completion) > 0 else None
+        print(one_shot_example_name)
+
         prompt = prompts.execution_agent(
                 self.objective,
                 self.completed_tasks,
                 self.get_current_state,
                 current_task,
+                [one_shot for one_shot in one_shots if one_shot["task"] == one_shot_example_name][0] if one_shot_example_name is not None else ''
             )
-        # print(Fore.LIGHTCYAN_EX + prompt + Fore.RESET)
+        print(Fore.LIGHTCYAN_EX + prompt + Fore.RESET)
         changes = openai_call(
             prompt,
             0.4,
@@ -53,8 +71,24 @@ class AutonomousAgent:
         )
 
         # try until complete
-        result = self.repl_agent(current_task, changes)
+        result, code, cot = self.repl_agent(current_task, changes)
         self.completed_tasks.append(task)
+        one_shots.append(
+            {
+                "memory_id": "os-{0:09d}".format(len(one_shots)+1),
+                "task": current_task,
+                "thoughts": cot[cot.lower().index('chain of thoughts:')+18:].strip(),
+                "code": code.strip().strip('\n\n'),
+                "keywords": eval(openai_call("I must analyze the following task name and action and write a list of keywords.\n"
+                            f"Task name: {current_task};\nAction: {code};\n\n"
+                            f"> I must write a python list cointaing only one string,and inside this string one or more keywords i.e: ['search, person_a, using pyautogui, using execution_agent']\n"
+                            f"My answer:"))[0]
+            }
+        )
+
+        with open("memories/one-shots.json", 'w') as f:
+            f.write(json.dumps(one_shots, indent=True))
+
         return changes + f"; {result}"
 
     def repl_agent(self, current_task, changes):
@@ -64,7 +98,7 @@ class AutonomousAgent:
             try:
                 action_func = exec(code, self.__dict__)
                 result = self.action(self)
-                return result
+                return result, code, cot
             except Exception as e:
                 prompt = prompts.fix_agent(current_task, code, cot, e)
                 print(prompt)
@@ -77,7 +111,7 @@ class AutonomousAgent:
                 code, cot = split_answer_and_cot(new_code)
                 action_func = exec(code, self.__dict__)
                 result = self.action(self)
-                return result
+                return result, code, cot
 
     def change_propagation_agent(self, _changes):
         return openai_call(
@@ -116,6 +150,9 @@ class AutonomousAgent:
         # [(0, (0, 0), {"task": self.task_list[0]["task_name"], "result": "result"})]
         self.indexes[index_name].upsert(content)
 
+    def count_tokens(self, text):
+        return len(encoding.encode(text))
+
 
 first_task = {"task_id": 1, "task_name": consts.YOUR_FIRST_TASK}
 AI = AutonomousAgent(consts.OBJECTIVE)
@@ -136,7 +173,6 @@ if table_name not in pinecone.list_indexes():
 # Connect to the index
 index = pinecone.Index(table_name)
 AI.indexes[table_name] = index
-
 execution_agent = AI.execution_agent
 
 
