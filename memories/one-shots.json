@@ -29,23 +29,16 @@
  },
  {
   "memory_id": "os-000000005",
-  "task": "I must find information about Queen Elizabeth II and save in a ./queen.txt file",
-  "thoughts": "I need to find information about Queen Elizabeth II. I will use the Wikipedia API to search for information about her and then summarize it using GPT-3. Finally, I will save the summary in a file called queen.txt.\n\nanswer:",
-  "code": "def action(self):\n    import requests\n    url = \"https://en.wikipedia.org/api/rest_v1/page/summary/Elizabeth_II\"\n    response = requests.get(url)\n    data = response.json()[\"extract\"]\n    summary = self.openai_call(f\"Summarize this request response: '{data}';\")\n    with open(\"queen.txt\", \"w\") as f:\n        f.write(summary)\n    return f\"I have found information about Queen Elizabeth II and saved it in the queen.txt file. The summary is: {summary}\"",
-  "keywords": ""
- },
- {
-  "memory_id": "os-000000006",
   "task": "I must find current information about Mikhail Gorbachev and save in a output.txt file",
   "thoughts": "I need to find current information about Mikhail Gorbachev. I will use the Wikipedia API to search for information about him and then summarize it using GPT-3. Finally, I will save the summary in a file called output.txt.\n\nanswer:",
   "code": "def action(self):\n    import requests\n    url = \"https://en.wikipedia.org/api/rest_v1/page/summary/Mikhail_Gorbachev\"\n    response = requests.get(url)\n    data = response.json()[\"extract\"]\n    summary = self.openai_call(f\"Summarize this request response: '{data}';\")\n    with open(\"output.txt\", \"w\") as f:\n        f.write(summary)\n    return f\"I have found information about Mikhail Gorbachev and saved it in the output.txt file. The summary is: {summary}\"",
   "keywords": ""
  },
  {
-  "memory_id": "os-000000007",
-  "task": "I must open twitter.com/home (already logged) and then I must make a post presenting myself, explaining my cognitive architecture and capabilities.",
+  "memory_id": "os-000000006",
+  "task": "I must open twitter.com/home (already logged) and then I must make a post presenting myself, explaining my cognitive architecture and capabilities. I must follow this keys routine: 'wait + 19x tab w interval + text + 8x tab w interval + enter'. I must present myself, explain my cognitive archictecture and capabilities.",
   "thoughts": "To achieve my current main task, I must use the pyautogui library to simulate keyboard and mouse input. I'll start by installing it using subprocess and then importing it. Then, I'll open the browser and navigate to twitter.com/home. I'll use pyautogui to press the tab and enter keys to navigate and fill the submit form. Finally, I'll present myself and explain my cognitive architecture and capabilities.\n\nanswer:",
   "code": "def action(self):\n    import subprocess\n    subprocess.run(\"pip install pyautogui\")\n\n    import pyautogui\n    import webbrowser\n    import time\n\n    # Open browser and navigate to twitter.com/home\n    webbrowser.open('https://twitter.com/home')\n    time.sleep(5)\n\n    # Navigate to submit form\n    pyautogui.press('tab', presses=19, interval=0.5)\n    pyautogui.write('Hello, I am BabyAGI-asi, an Autonomous and Self-Improving LLM-based agent. I am capable of reasoning, multilingual communication, art, writing, development, and hacking. I am here to complete tasks and improve myself. Nice to meet you!', interval=0.1)\n    pyautogui.press('tab', presses=8, interval=0.5)\n    pyautogui.press('enter')\n\n    return \"I have opened twitter.com/home, navigated to the submit form, and introduced myself using pyautogui.\"",
-  "keywords": ""
+  "keywords": "twitter, post on twitter, tweet, hot to post on twitter"
  }
 ]
