@@ -5,9 +5,10 @@
 # Objective
 This Python script is an example of a LLM-powered autonomous agent. The system uses OpenAI API to create and execute tasks.
 The core idea of the project is to provide the assistant with the tools it needs to do any task - if it's smart enough. 
-It can arbitrarily execute code and control its own flow and memory, for a sufficiently intelligent agent, either by pre-training, fine-tuning or prompt-optimization, this should be enough (if it is possible at all)
+It can arbitrarily execute code and control its own flow and memory, for a sufficiently intelligent agent, either by pre-training, fine-tuning or prompt-optimization, this should be enough (if it is possible at all).
 
-I have tested and am developing with only GPT-3
+This is just a PoC in constant development.
+
 
 # How It Works<a name="how-it-works"></a>
 The script works by running an infinite loop that does the following steps:
