@@ -13,17 +13,27 @@ I have tested and am developing with only GPT-3
 The script works by running an infinite loop that does the following steps:
 
 1- Write a function to finish the most relevant task (execution_agent);
-2- Read the changes and pass them to execution_agent again (change_propagation_agent;
+ 
+3- Save execution to memory if successful;
+ 
+2- Read the changes and pass them to execution_agent again (change_propagation_agent);
+
+# Dynamic one-shot
+
+The execution_agent one-shot example is dynamically chosen according to the context of the current task, so once BASI has done a task correctly, it will be able to do it more easily in the future. One-shots are in ``/memories``. One could inject examples with hotkey shortcuts, utility codes... to get more out of BASI in everyday life. 
+
+For example BASI can access and post a tweet in the account that is open in the browser thanks to a one-shot that teaches it to post on twitter using the tab key.
+
 
 # BASI tools
 
 Both agents share the same "personality" and the same chore prompt. 
-Currently, I have removed the use of Pinecone but will be bringing it back into an agent to handle I/O on different babyagi memory types.
 
 execution_agent tools:
 
 - openai_call
 - memory_agent (to retrieve and/or save information)
+- execution_agent (it can call itself)
 
 memory_agent tools:
 - openai_call
@@ -41,12 +51,15 @@ To use the script, you will need to follow these steps:
 1. Install the required packages: `pip install -r requirements.txt`
 2. Copy the .env.example file to .env: `cp .env.example .env`. This is where you will set the following variables.
 3. Set your OpenAI key and model in the OPENAI_API_KEY, OPENAPI_API_MODEL variables.
-6. Set the objective of the task management system in the OBJECTIVE variable. Alternatively you can pass it to the script as a quote argument.
+4. Set your OpenAI and Pinecone API keys in the OPENAI_API_KEY, OPENAPI_API_MODEL, and PINECONE_API_KEY variables.
+5. Set the Pinecone environment in the PINECONE_ENVIRONMENT variable.
+6. Set the name of the table where the task results will be stored in the TABLE_NAME variable.
+7. Set the objective of the task management system in the OBJECTIVE variable. Alternatively you can pass it to the script as a quote argument.
 ```
 ./babyagi.py ["<objective>"]
 ```
-7. Set the first task of the system in the FIRST_TASK variable.
-8. Run the script.
+8. Set the first task of the system in the FIRST_TASK variable.
+9. Run the script.
 
 # Examples
 ```
@@ -66,6 +79,7 @@ FIRST_TASK=Plan what to do. I must create a initial end-to-end task list, which 
 
 # Warning<a name="continous-script-warning"></a>
 This script is designed to run indefinitely until the task list is empty. So it can be in an endless loop, depending on the objective and first task.
+This script consumes a lot more tokens than the original babyagi, so using GPT-4 can quickly get expensive. I haven't tested it yet.
 
 I recommend using this script in a virtual machine and always making a backup if changing something. BabyAGI can run commands and python code on your computer. The results are almost always unexpected.
 
