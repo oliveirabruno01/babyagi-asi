@@ -2,7 +2,7 @@ import colorama
 from colorama import Fore
 from serpapi import GoogleSearch
 
-from consts import SERP_API_KEY
+from consts import SERP_API_KEY, GLOBAL_HL, GLOBAL_GL, GLOBAL_LOCATION
 
 colorama.init()
 
@@ -15,9 +15,9 @@ def get_serp_query_result(query: str, n: int = 1, engine: str = 'GoogleSearch') 
     if engine == 'GoogleSearch':
         params = {
             "q": query,
-            "location": "Caraguatatuba, São Paulo, Brazil",
-            "hl": "pt",
-            "gl": "br",
+            "location": GLOBAL_LOCATION,
+            "hl": GLOBAL_HL,
+            "gl": GLOBAL_GL,
             "google_domain": "google.com",
             "api_key": SERP_API_KEY
         }
