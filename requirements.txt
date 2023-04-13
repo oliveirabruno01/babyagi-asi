@@ -5,3 +5,4 @@ pinecone_client==2.2.1
 psutil==5.9.4
 python-dotenv==1.0.0
 tiktoken==0.3.3
+bs4
