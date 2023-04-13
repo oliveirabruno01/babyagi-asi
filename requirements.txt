@@ -1,3 +1,7 @@
+colorama==0.4.4
+google_search_results==2.4.2
 openai==0.27.2
-pinecone-client==2.2.1
+pinecone_client==2.2.1
+psutil==5.9.4
 python-dotenv==1.0.0
+tiktoken==0.3.3
