@@ -23,6 +23,6 @@ def get_serp_query_result(query: str, n: int = 1, engine: str = 'GoogleSearch') 
         }
         response = GoogleSearch(params)
         search = response.get_dict()["organic_results"]
-        search = [[result["snippet"], result["link"]] if "snippet" in result.keys() else [] for result in search[:n+1]][1:]
+        search = [[result["snippet"], result["link"]] if "snippet" in result.keys() else [] for result in search[:n+1 if len(search) >= n else len(search)]][1:]
 
     return search

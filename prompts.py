@@ -32,11 +32,11 @@ I must use this ONLY when I need to handle LARGE texts and nlp processes with la
 I remember this example which might help me with my current task, I can't just copy the example from my memory but it might help me in some way:
 
 # Example from memory
-Task: {one_shot['task']}: 
+Task: {one_shot['task'] if 'task' in one_shot else ''}: 
 "
-chain of thoughts: {one_shot['thoughts']} 
+chain of thoughts: {one_shot['thoughts'] if 'thoughts' in one_shot else ''} 
 
-answer: {one_shot['code']}
+answer: {one_shot['code'] if 'code' in one_shot else ''}
 "
 """
 
@@ -60,6 +60,8 @@ My current main task: {current_task}. I must use my tools to achieve the task go
 I can't do more than the task asks, and I need to be careful to not anticipate tasks.
 I must try to achieve my task goal in the simplest way possible. 
 I don't need to use a tool if simple code fixs task.
+
+I must write my 'answer:' with a 'action' function that receives self and returns a string (this string will be passed to ChangePropagation)
 
 #? IMPORTING LIBS
 I ALWAYS must import the external libs I will use, e.g pyautogui, numpy, psutil, pycountry, bs4...
