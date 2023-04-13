@@ -1,3 +1,4 @@
 .env
 .idea
 __pycache__
+memories/private-one-shots.json

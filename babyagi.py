@@ -9,8 +9,12 @@ openai.api_key = consts.OPENAI_API_KEY
 
 encoding = tiktoken.encoding_for_model("gpt-3.5-turbo" if not consts.USE_GPT4 else "gpt-4")
 
+one_shots = []
 with open('memories/one-shots.json', 'r') as f:
-    one_shots = json.loads(f.read())
+    one_shots += json.loads(f.read())
+
+with open('memories/private-one-shots.json', 'r') as f:
+    one_shots += json.loads(f.read())
 
 
 def split_answer_and_cot(text):
