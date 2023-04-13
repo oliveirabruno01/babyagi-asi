@@ -79,6 +79,13 @@ OBJECTIVE=Improve my prompts at ./prompts.py file
 FIRST_TASK=Plan what to do. I must create a initial end-to-end task list, which the final task will make my objective completed.
 ```
 
+## Running in a container
+To run the script inside a docker container:
+
+```
+docker-compose run basi
+```
+
 # Warning<a name="continous-script-warning"></a>
 This script is designed to run indefinitely until the task list is empty. So it can be in an endless loop, depending on the objective and first task.
 This script consumes a lot more tokens than the original babyagi, so using GPT-4 can quickly get expensive. I haven't tested it yet.
