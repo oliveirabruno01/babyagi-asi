@@ -71,8 +71,8 @@ chain of thoughts: I must use subprocess to pip install pyautogui since it's not
 answer:
 
 def action(self):
-    import subprocess
-    subprocess.run("pip install pyautogui")
+    import os
+    os.system("pip install pyautogui")
     ...
     return "I have installed and imported pyautogui"
 "
@@ -164,8 +164,8 @@ chain of thoughts: I must use subprocess to pip install pyautogui since it's not
 answer:
 
 def action(self):
-    import subprocess
-    subprocess.run("pip install pyautogui")
+    import os
+    os.system("pip install pyautogui")
     ...
     return "I have installed and imported pyautogui"
 
