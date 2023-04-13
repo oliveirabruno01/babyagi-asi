@@ -104,17 +104,16 @@ class AutonomousAgent:
                 result = self.action(self)
                 return result, code, cot
             except Exception as e:
-                print(Fore.RED + f"\n\nFIXING AN ERROR: {e}\n" + Fore.RESET + consts.OBJECTIVE)
+                print(Fore.RED + f"\n\nFIXING AN ERROR: {e}\n" + Fore.RESET)
                 print(f"{ct} try")
 
                 prompt = prompts.fix_agent(current_task, code, cot, e)
-                print(prompt)
                 new_code = openai_call(
                     prompt,
                     0.4,
                     1000,
                 )
-                print(new_code, end="\n")
+                # print(new_code, end="\n")
                 try:
                     code, cot = split_answer_and_cot(new_code)
                     action_func = exec(code, self.__dict__)

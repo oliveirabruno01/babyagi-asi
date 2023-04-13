@@ -29,7 +29,10 @@ I must use this ONLY when I need to handle LARGE texts and nlp processes with la
 - self.get_serp_query_result(query: str, n: int) -> list of lists on format [['snippet', 'link'], ['snippet', 'link']], return the n most relevant results of a given query using SerpAPI (GoogleSearch);
 
 #? TOOLS USAGE EXAMPLES
-Example task: {one_shot['task']}: 
+I remember this example which might help me with my current task, I can't just copy the example from my memory but it might help me in some way:
+
+# Example from memory
+Task: {one_shot['task']}: 
 "
 chain of thoughts: {one_shot['thoughts']} 
 
