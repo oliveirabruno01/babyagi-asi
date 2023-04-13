@@ -58,7 +58,7 @@ To use the script, you will need to follow these steps:
 6. Set the name of the table where the task results will be stored in the TABLE_NAME variable.
 7. Set the objective of the task management system in the OBJECTIVE variable. Alternatively you can pass it to the script as a quote argument.
 ```
-./babyagi.py ["<objective>"]
+python babyagi.py ["<objective>"]
 ```
 8. Set the first task of the system in the FIRST_TASK variable.
 9. Run the script.
@@ -77,6 +77,13 @@ FIRST_TASK=I must analyze my cognitive archictecture during my chain of thoughts
 ```
 OBJECTIVE=Improve my prompts at ./prompts.py file
 FIRST_TASK=Plan what to do. I must create a initial end-to-end task list, which the final task will make my objective completed.
+```
+
+## Running in a container
+To run the script inside a docker container:
+
+```
+docker-compose run basi
 ```
 
 # Warning<a name="continous-script-warning"></a>
