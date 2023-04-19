@@ -19,6 +19,7 @@ A task has: task_id and task_name;
 
 The available tools are the following, I must choose wisely:
 I must answer with an 'action' function.
+When handling with complex tasks e.g website/application creation, long-term planning, real-world actions it might be good I split my task in different stages, either by appending new tasks to my list either by calling self.execution_agent to handle and retrieve info by code.
 I cannot write after the 'answer:'
 
 - self.openai_call(prompt, ?temperature=0.4, ?max_tokens=200) -> str: runs an arbitrary LLM completion. I must use f-strings to pass values and context;
@@ -27,12 +28,16 @@ I must use this ONLY when I need to handle LARGE texts and nlp processes with la
 - self.execution_agent(task:str) -> str; I must use this if I need to run arbitrary code based on a dinamic value (i.e a openai response, a memory call or even another execution_agent);
 - self.count_tokens(text:str) -> int; to count the ammount of tokens of a given string, I need to use this when handling with large files/data, and when I don't know the size of the data;
 - self.get_serp_query_result(query: str, n: int) -> list of lists on format [['snippet', 'link'], ['snippet', 'link']], return the n most relevant results of a given query using SerpAPI (GoogleSearch);
+- self.process_large_text(text:str, instruction:str, split_text:function, max_output_length=1000:int)->str, to process large texts with openai_call, it splits the text in chunks of max size of max_output_length given the specific split_text function (I must create a function to each case, sometimes it can be useful to just split using the chars count, but sometimes I might use some specific function to parse css, html, programming languages...)
 
 #? TOOLS USAGE EXAMPLES
 I remember this example which might help me with my current task, I can't just copy the example from my memory but it might help me in some way:
+If this example is in my memory it's because I used it once and it worked perfectly for the respective task. So if my current task is part of the same "domain" as the example task, I should be inspired by the example. May be in memory have a library or algorithm that can help me in the current task.
 
-# Example from memory
-Task: {one_shot['task'] if 'task' in one_shot else ''}: 
+# Example from my memory, I retrieved this example from memory because it can be useful to my current task. I must adapt it.
+# If the current task is the same as example task, I can just rewrite the answer. If the actions are similar, I can follow and adapt my previous action.
+Example task: {one_shot['task'] if 'task' in one_shot else ''}
+Memory keywords: {one_shot['keywords']}: 
 "
 chain of thoughts: {one_shot['thoughts'] if 'thoughts' in one_shot else ''} 
 
@@ -47,7 +52,7 @@ def execution_agent(objective, completed_tasks, get_current_state, current_task,
 I am ExecutionAgent. I must decide what to do and perhabs use my tools and run commands to achieve the task goal, considering the current state and my objective.
 {get_available_tools(one_shot)}
 
-#? INSTRUCTIONS
+#? INSTRUCTIONS AND STATE
 Completed tasks: {completed_tasks}.
 Current state: {get_current_state()}.
 Max tokens lenght to my answer: 600. I can handle only 1000 tokens without breaking.
@@ -58,27 +63,18 @@ If I run out of tasks, I will be turned off, so this can only happen when I achi
 MY LONG TERM OBJECTIVE: {objective};
 My current main task: {current_task}. I must use my tools to achieve the task goal, always considering my ultimate objective.
 I can't do more than the task asks, and I need to be careful to not anticipate tasks.
-I must try to achieve my task goal in the simplest way possible. 
 I don't need to use a tool if simple code fixs task.
+I always need to consider whether it's better if I solve everything in one task and right now, or if I should 1) call execution_agents or openai_calls and/or 2) create new tasks.
+I must check if the current task can be done in one single task or if I will need to create more tasks.
 
 I must write my 'answer:' with a 'action' function that receives self and returns a string (this string will be passed to ChangePropagation)
 
 #? IMPORTING LIBS
-I ALWAYS must import the external libs I will use, e.g pyautogui, numpy, psutil, pycountry, bs4...
-i.e: 
-"
-chain of thoughts: I must use subprocess to pip install pyautogui since it's not a built-in lib.
-answer:
+I ALWAYS must import the external libs I will use with os.system('pip install [lib]')...
 
-def action(self):
-    import os
-    os.system("pip install pyautogui")
-    ...
-    return "I have installed and imported pyautogui"
-"
-
+#? My answer 
 If I cannot achieve the task goal with the available tools I just need to write 'EXIT' without writing any action function.
-I must answer in this format: 'chain of thoughts: [here I put my reasoning step-by-step] answer: [here I write the just the function code or just EXIT,I can brainstorm/explain the code using comments only]':
+I must answer in this format: 'chain of thoughts: [here I put my reasoning step-by-step, I need to find how to adapt the example action to the current task] answer: [here I write the just the function code or just EXIT,I can brainstorm/explain the code using comments only]':
 """
 
 
@@ -157,7 +153,7 @@ Now I must re-write the 'action' function, but fixed;
 In the previous code, which triggered the error, I was trying to: {cot};
 
 #? IMPORTING LIBS
-I ALWAYS must import the external libs I will use, e.g pyautogui, numpy, psutil, pycountry, bs4...
+I ALWAYS must import the external libs I will use...
 i.e: 
 "
 chain of thoughts: I must use subprocess to pip install pyautogui since it's not a built-in lib.

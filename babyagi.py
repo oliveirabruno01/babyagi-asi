@@ -47,7 +47,7 @@ class AutonomousAgent:
         # filter properties to avoid adiction
         hash = {"self": [nome for nome in dir(self) if not nome.startswith("__") and nome not in "search_in_index get_ada_embedding append_to_index memory_agent repl_agent task_list memory focus indexes"],
                 "To-do tasks list": self.task_list,
-                "Available indexes": [index for index in self.indexes.keys()],
+                "Available indexes": [ind for ind in self.indexes.keys()],
                 "self.memory": self.memory,
                 "self.focus": self.focus,
                 "current dir": os.listdir(os.getcwd())}
@@ -135,7 +135,6 @@ class AutonomousAgent:
                 except Exception as e:
                     pass
             ct += 1
-
 
     def change_propagation_agent(self, _changes):
         return openai_call(
