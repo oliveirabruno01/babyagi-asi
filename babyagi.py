@@ -18,6 +18,7 @@ with open('memories/private-one-shots.json', 'r') as f:
 
 all_one_shots = one_shots+p_one_shots
 
+
 def split_answer_and_cot(text):
     start_index = text.lower().index("answer:")+7
     end_index = text.lower().rfind("note:")
@@ -171,6 +172,20 @@ class AutonomousAgent:
 
     def count_tokens(self, text):
         return len(encoding.encode(text))
+
+    def process_large_text(self, text, instruction, split_text, max_output_length=1000):
+        text_chunks = split_text(text, max_output_length)
+        processed_chunks = []
+        for i, chunk in enumerate(text_chunks):
+            print(i)
+            prompt = f"Chunk {i + 1}/{len(text_chunks)}\n\nYou are an AI processing a text snippet, you must follow the instruction and answer just with the processed output. " \
+                     f"If your chunk has any error or an abrupt ending, don't complete/fix it, you must just follow the instruction.\n\n" \
+                     f"Instruction: {instruction}\n\nText chunk: {chunk}. You answer:"
+            processed_chunk = openai_call(prompt, role="assistant", max_tokens=1200)
+            processed_chunks.append(processed_chunk)
+
+        print('\n'.join(processed_chunks))
+        return '\n'.join(processed_chunks)
 
 
 first_task = {"task_id": 1, "task_name": consts.YOUR_FIRST_TASK}
