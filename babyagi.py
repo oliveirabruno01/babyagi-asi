@@ -52,9 +52,12 @@ class AutonomousAgent:
                 "current dir": os.listdir(os.getcwd())}
         return hash
 
-    def execution_agent(self, current_task):
-        one_shots_names_and_kw = [f"name: '{one_shot['task']}', task_id: '{one_shot['memory_id']}',keywords: '{one_shot['keywords']}';\n\n" for one_shot in one_shots]
-        completion = eval(split_answer_and_cot(openai_call(f"My current task is: {current_task}. "
+    def execution_agent(self, current_task, root=False):
+        if not root:
+            print(Fore.LIGHTRED_EX + "\nExecution Agent call with task:" + Fore.RESET + f"{current_task}")
+
+        one_shots_names_and_kw = [f"name: '{one_shot['task']}', task_id: '{one_shot['memory_id']}', major objective: {one_shot['objective']}, keywords: '{one_shot['keywords']}';\n\n" for one_shot in all_one_shots]
+        code, cot = split_answer_and_cot(openai_call(f"My current task is: {current_task}. My current major objective is {self.objective}. I must choose a one_shot based on my current task name, not in my major objective."
                                       f"I must choose only the most relevant task between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
                                       f"I must write a list cointaining only the memory_id of the most relevant one_shot. i.e '[\"one_shot example memory_id\"]'."
                                       f"I must read the examples' names and choose one by memory_id. I must answer in the format 'CHAIN OF THOUGHTS: here I put a short reasoning;\nANSWER: ['most relevant memory_id']';"
@@ -202,7 +205,7 @@ if __name__ == "__main__":
             print(Fore.BLUE + "\n*NEXT TASK*\n" + Fore.RESET)
             print(str(task["task_id"]) + ": " + task["task_name"])
 
-            result = execution_agent(task["task_name"])
+            result = execution_agent(task["task_name"], root=True)
             changes = AI.change_propagation_agent(result)
 
             print(Fore.YELLOW + "\n*TASK RESULT*\n" + Fore.RESET)
