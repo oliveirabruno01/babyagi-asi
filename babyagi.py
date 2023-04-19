@@ -61,7 +61,10 @@ class AutonomousAgent:
                                       f"I must choose only the most relevant task between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
                                       f"I must write a list cointaining only the memory_id of the most relevant one_shot. i.e '[\"one_shot example memory_id\"]'."
                                       f"I must read the examples' names and choose one by memory_id. I must answer in the format 'CHAIN OF THOUGHTS: here I put a short reasoning;\nANSWER: ['most relevant memory_id']';"
-                                      f"My answer:", max_tokens=800).strip("'"))[0])
+                                      f"My answer:", max_tokens=800).strip("'"))
+        print(cot)
+        pattern = r'\[([^\]]+)\]'
+        completion = eval("["+re.findall(pattern, code)[0]+"]")
         print(f"\nChosen one-shot example: {completion}\n")
         one_shot_example_name = completion[0] if len(completion) > 0 else None
 
