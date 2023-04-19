@@ -2,7 +2,7 @@ import openai, consts
 from datetime import datetime
 
 
-def openai_call(prompt, temperature=0.4, max_tokens=200, role="assistant"):
+def openai_call(prompt, temperature=0.8, max_tokens=200, role="assistant"):
     messages = [
         {
             "role": "system",
