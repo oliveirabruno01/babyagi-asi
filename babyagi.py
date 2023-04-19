@@ -1,4 +1,4 @@
-import openai, prompts, consts, pinecone, os, subprocess, tiktoken, json
+import openai, prompts, consts, pinecone, os, subprocess, tiktoken, json, re
 from tools import serp_api
 from colorama import Fore
 from collections import deque
