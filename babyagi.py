@@ -9,13 +9,14 @@ openai.api_key = consts.OPENAI_API_KEY
 
 encoding = tiktoken.encoding_for_model("gpt-3.5-turbo" if not consts.USE_GPT4 else "gpt-4")
 
-one_shots = []
+one_shots, p_one_shots = [], []
 with open('memories/one-shots.json', 'r') as f:
     one_shots += json.loads(f.read())
 
 with open('memories/private-one-shots.json', 'r') as f:
-    one_shots += json.loads(f.read())
+    p_one_shots += json.loads(f.read())
 
+all_one_shots = one_shots+p_one_shots
 
 def split_answer_and_cot(text):
     start_index = text.lower().index("answer:")+7
@@ -66,7 +67,7 @@ class AutonomousAgent:
                 self.completed_tasks,
                 self.get_current_state,
                 current_task,
-                [one_shot for one_shot in one_shots if one_shot["memory_id"] == one_shot_example_name][0] if one_shot_example_name is not None else ''
+                [one_shot for one_shot in all_one_shots if one_shot["memory_id"] == one_shot_example_name][0] if one_shot_example_name is not None else ''
             )
         # print(Fore.LIGHTCYAN_EX + prompt + Fore.RESET)
         changes = openai_call(
