@@ -1,6 +1,7 @@
 [
   {
     "memory_id": "pos-000000001",
+    "objective": "I must complete the first task",
     "task": "I need to test my abilitie to create new tasks",
     "thoughts": "I need to create a new task. I must add a new task to my task_list deque with a unique task_id and a task_name. I can use the task_id_counter variable to ensure uniqueness.",
     "code": "def action(self):\n    task_name = \"New task\"\n    task_id = self.task_id_counter\n    self.task_id_counter += 1\n    self.task_list.append({\"task_id\": task_id, \"task_name\": task_name})\n    return f\"I have added a new task with task_id {task_id} and task_name {task_name}\"",

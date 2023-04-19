@@ -90,6 +90,7 @@ class AutonomousAgent:
         one_shots.append(
             {
                 "memory_id": "os-{0:09d}".format(len(one_shots)+1),
+                "objective": self.objective,
                 "task": current_task,
                 "thoughts": cot[cot.lower().index('chain of thoughts:')+18:cot.lower().index('answer:')].strip(),
                 "code": code.strip().strip('\n\n'),
