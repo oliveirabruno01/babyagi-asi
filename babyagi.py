@@ -78,8 +78,8 @@ class AutonomousAgent:
         # print(Fore.LIGHTCYAN_EX + prompt + Fore.RESET)
         changes = openai_call(
             prompt,
-            0.4,
-            1000,
+            .5,
+            4000-self.count_tokens(prompt),
         )
 
         print(Fore.LIGHTMAGENTA_EX+f"\n\ncodename ExecutionAgent:"+Fore.RESET+f"\n\n{changes}")
@@ -103,7 +103,7 @@ class AutonomousAgent:
         with open("memories/one-shots.json", 'w') as f:
             f.write(json.dumps(one_shots, indent=True, ensure_ascii=False))
 
-        return changes + f"; {result}"
+        return result
 
     def repl_agent(self, current_task, changes):
         code, cot = split_answer_and_cot(changes)
