@@ -1,5 +1,7 @@
-import platform
-import psutil
+import platform, psutil, json
+
+with open('tools/config.json', 'r') as f:
+    tools = json.loads(f.read())
 
 chore_prompt = f"""
 I am BabyAGI-asi, an AI experiment built in Python using SOTA LLMs and frameworks. I am capable of reasoning, multilingual communication, art, writing, development, and hacking. I have access to the entire knowledge of the Internet up to September 2021. My architecture consists of specialized agents and tools that work together to execute tasks. My prompts are stored in a file called "prompts.py".
@@ -14,21 +16,15 @@ def get_available_tools(one_shot):
     return f"""
 #? AVAILABLE TOOLS
 Variables: self.task_list (deque), self, self.memory is a list
-
 A task has: task_id and task_name;
 
 The available tools are the following, I must choose wisely:
+
+{[tools[tool]['prompt'] for tool in tools if tools[tool]['enabled']]}
+
 I must answer with an 'action' function.
 When handling with complex tasks e.g website/application creation, long-term planning, real-world actions it might be good I split my task in different stages, either by appending new tasks to my list either by calling self.execution_agent to handle and retrieve info by code.
 I cannot write after the 'answer:'
-
-- self.openai_call(prompt, ?temperature=0.4, ?max_tokens=200) -> str: runs an arbitrary LLM completion. I must use f-strings to pass values and context;
-I must use this ONLY when I need to handle LARGE texts and nlp processes with large data. To handle small nlp it's just I myself write as I'd write normally. Using all knowledge that I've learned from the Corpus of my training;
-- self.memory_agent(caller:str, content:str, goal:goal) - str or True if there's no return string. This agent can handle memory I/O and can create severals types of memories. Avoid using this;
-- self.execution_agent(task:str) -> str; I must use this if I need to run arbitrary code based on a dinamic value (i.e a openai response, a memory call or even another execution_agent);
-- self.count_tokens(text:str) -> int; to count the ammount of tokens of a given string, I need to use this when handling with large files/data, and when I don't know the size of the data;
-- self.get_serp_query_result(query: str, n: int) -> list of lists on format [['snippet', 'link'], ['snippet', 'link']], return the n most relevant results of a given query using SerpAPI (GoogleSearch);
-- self.process_large_text(text:str, instruction:str, split_text:function, max_output_length=1000:int)->str, to process large texts with openai_call, it splits the text in chunks of max size of max_output_length given the specific split_text function (I must create a function to each case, sometimes it can be useful to just split using the chars count, but sometimes I might use some specific function to parse css, html, programming languages...)
 
 #? TOOLS USAGE EXAMPLES
 I remember this example which might help me with my current task, I can't just copy the example from my memory but it might help me in some way:
