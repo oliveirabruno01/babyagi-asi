@@ -12,8 +12,8 @@ I am running on a {platform.system()} {platform.architecture()[0]} system with {
 """
 
 
-def get_available_tools(one_shot):
-    return f"""
+def get_available_tools(one_shots):
+    prompt = f"""
 #? AVAILABLE TOOLS
 Variables: self.task_list (deque), self, self.memory is a list
 A task has: task_id and task_name;
@@ -32,14 +32,17 @@ If this example is in my memory it's because I used it once and it worked perfec
 
 # Example from my memory, I retrieved this example from memory because it can be useful to my current task. I must adapt it.
 # If the current task is the same as example task, I can just rewrite the answer. If the actions are similar, I can follow and adapt my previous action.
+
+{[f'''
 Example task: {one_shot['task'] if 'task' in one_shot else ''}
 Memory keywords: {one_shot['keywords']}: 
 "
 chain of thoughts: {one_shot['thoughts'] if 'thoughts' in one_shot else ''} 
 
 answer: {one_shot['code'] if 'code' in one_shot else ''}
-"
+"''' for one_shot in one_shots]}
 """
+    return prompt
 
 
 def execution_agent(objective, completed_tasks, get_current_state, current_task, one_shot):

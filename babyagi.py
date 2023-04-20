@@ -57,23 +57,24 @@ class AutonomousAgent:
             print(Fore.LIGHTRED_EX + "\nExecution Agent call with task:" + Fore.RESET + f"{current_task}")
 
         one_shots_names_and_kw = [f"name: '{one_shot['task']}', task_id: '{one_shot['memory_id']}', major objective: {one_shot['objective']}, keywords: '{one_shot['keywords']}';\n\n" for one_shot in all_one_shots]
-        code, cot = split_answer_and_cot(openai_call(f"My current task is: {current_task}. My current major objective is {self.objective}. I must choose a one_shot based on my current task name, not in my major objective."
-                                      f"I must choose only the most relevant task between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
-                                      f"I must write a list cointaining only the memory_id of the most relevant one_shot. i.e '[\"one_shot example memory_id\"]'."
-                                      f"I must read the examples' names and choose one by memory_id. I must answer in the format 'CHAIN OF THOUGHTS: here I put a short reasoning;\nANSWER: ['most relevant memory_id']';"
+        code, cot = split_answer_and_cot(openai_call(f"My current task is: {current_task}. My current major objective is {self.objective}."
+                                      f"I must choose only the {consts.N_SHOT} most relevant tasks between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
+                                      f"I must write a list({consts.N_SHOT}) cointaining only the memory_ids of the {consts.N_SHOT} most relevant one_shots. i.e '[\"one_shot example memory_id\"]'."
+                                      f"I must read the examples' names and choose {consts.N_SHOT} by memory_id. I must answer in the format 'CHAIN OF THOUGHTS: here I put a short reasoning;\nANSWER: ['most relevant memory_id']';"
                                       f"My answer:", max_tokens=800).strip("'"))
         print(cot)
         pattern = r'\[([^\]]+)\]'
         completion = eval("["+re.findall(pattern, code)[0]+"]")
         print(f"\nChosen one-shot example: {completion}\n")
-        one_shot_example_name = completion[0] if len(completion) > 0 else None
+        one_shot_example_names = completion[:consts.N_SHOT] if len(completion) > 0 else None
 
         prompt = prompts.execution_agent(
                 self.objective,
                 self.completed_tasks,
                 self.get_current_state,
                 current_task,
-                [one_shot for one_shot in all_one_shots if one_shot["memory_id"] == one_shot_example_name][0] if one_shot_example_name is not None else ''
+                [one_shot for one_shot in all_one_shots if one_shot["memory_id"] in one_shot_example_names] if one_shot_example_names is not None else '',
+                self.task_list
             )
         # print(Fore.LIGHTCYAN_EX + prompt + Fore.RESET)
         changes = openai_call(
