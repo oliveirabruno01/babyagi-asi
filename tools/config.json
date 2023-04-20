@@ -1,6 +1,6 @@
 {
   "openai_call": {
-    "prompt": "- self.openai_call(prompt, ?temperature=0.4, ?max_tokens=200) -> str: runs an arbitrary LLM completion. I must use f-strings to pass values and context;\nI must use this ONLY when I need to handle LARGE texts and nlp processes with large data. To handle small nlp it's just I myself write as I'd write normally. Using all knowledge that I've learned from the Corpus of my training;\n",
+    "prompt": "- self.openai_call(prompt, ?temperature=0.4, ?max_tokens=200) -> str: runs an arbitrary LLM completion. I must use f-strings to pass values and context;\nI must use this ONLY when I need to handle LARGE texts and nlp processes with large data. To handle small nlp it's just I myself write as I'd write normally. Using all knowledge that I've learned from the Corpus of my training. openai_call tool doens't know anything about my computer or current task, so I always need to pass context to it using f-strings. e.g If I need to it edit a file I must pass the file content to it.;\n",
     "enabled": true
   },
   "execution_agent": {
