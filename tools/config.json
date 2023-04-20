@@ -12,7 +12,7 @@
     "enabled": true
   },
   "process_large_text": {
-    "prompt": "- self.process_large_text(text:str, instruction:str, split_text:function, max_output_length=1000:int)->str, to process large texts with openai_call, it splits the text in chunks of max size of max_output_length given the specific split_text function (I must create a function to each case, sometimes it can be useful to just split using the chars count, but sometimes I might use some specific function to parse css, html, programming languages...)\n",
+    "prompt": "- self.process_large_text(text:str, instruction:str, split_text:function, max_output_length=1000:int)->str, to process large texts with openai_call, it splits the text in chunks of max size of max_output_length given the specific split_text function (I must create a function to each case, sometimes it can be useful to just split using the chars count, but sometimes I might use some specific function to parse css, html, programming languages...)\n\n\nsplit_text function example:\ndef split_text(text, max_length):\n    # Split text into chunks of length at most max_length\n    chunks = []\n    while len(text) > 0:\n        chunk = text[:max_length]\n        text = text[max_length:]\n        chunks.append(chunk)\n    return chunks\n",
     "enabled": true
   },
   "get_serp_query": {
