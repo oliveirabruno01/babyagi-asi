@@ -1,10 +1,9 @@
-import openai, prompts, consts, pinecone, os, subprocess, tiktoken, json, re
+import openai, prompts, consts, os, tiktoken, json, re
 from tools import serp_api
 from colorama import Fore
 from collections import deque
 from api import openai_call
 
-print(Fore.RED + "\nOBJECTIVE\n" + Fore.RESET + consts.OBJECTIVE)
 openai.api_key = consts.OPENAI_API_KEY
 
 encoding = tiktoken.encoding_for_model("gpt-3.5-turbo" if not consts.USE_GPT4 else "gpt-4")
@@ -185,48 +184,3 @@ class AutonomousAgent:
 
         print('\n'.join(processed_chunks))
         return '\n'.join(processed_chunks)
-
-
-first_task = {"task_id": 1, "task_name": consts.YOUR_FIRST_TASK}
-AI = AutonomousAgent(consts.OBJECTIVE)
-AI.task_list.append(first_task)
-
-pinecone.init(api_key=consts.PINECONE_API_KEY, environment=consts.PINECONE_ENVIRONMENT)
-
-# Create Pinecone index
-table_name = "agicontext"
-dimension = 1536
-metric = "cosine"
-pod_type = "p1"
-if table_name not in pinecone.list_indexes():
-    pinecone.create_index(
-        table_name, dimension=dimension, metric=metric, pod_type=pod_type
-    )
-
-# Connect to the index
-index = pinecone.Index(table_name)
-AI.indexes[table_name] = index
-execution_agent = AI.execution_agent
-
-
-if __name__ == "__main__":
-    while True:
-        if AI.task_list:
-            print(
-                Fore.GREEN
-                + "\n*TASK LIST*\n"
-                + Fore.RESET
-                + "\n".join([f"{t['task_id']}: {t['task_name']}" for t in AI.task_list])
-            )
-            AI.task_list = deque(AI.task_list)
-            task = AI.task_list.popleft()
-            print(Fore.BLUE + "\n*NEXT TASK*\n" + Fore.RESET)
-            print(str(task["task_id"]) + ": " + task["task_name"])
-
-            result = execution_agent(task["task_name"], root=True)
-            changes = AI.change_propagation_agent(result)
-
-            print(Fore.YELLOW + "\n*TASK RESULT*\n" + Fore.RESET)
-            print(Fore.MAGENTA+"\n\ncodename ChangePropagationAgent:"+Fore.RESET+f"\n{changes}")
-        else:
-            break
