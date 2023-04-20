@@ -87,23 +87,25 @@ class AutonomousAgent:
 
         # try until complete
         result, code, cot = self.repl_agent(current_task, changes)
-        self.completed_tasks.append(task)
-        one_shots.append(
-            {
-                "memory_id": "os-{0:09d}".format(len(one_shots)+1),
-                "objective": self.objective,
-                "task": current_task,
-                "thoughts": cot[cot.lower().index('chain of thoughts:')+18:cot.lower().index('answer:')].strip(),
-                "code": code.strip().strip('\n\n'),
-                "keywords": eval(openai_call("I must analyze the following task name and action and write a list of keywords.\n"
-                            f"Task name: {current_task};\nAction: {code};\n\n"
-                            f"> I must write a python list cointaing only one string,and inside this string 3 or more keywords i.e: ['search, using pyautogui, using execution_agent, how to x, do y']\n"
-                            f"My answer:", max_tokens=2000))[0]
-            }
-        )
+        self.completed_tasks.append(current_task)
 
-        with open("memories/one-shots.json", 'w') as f:
-            f.write(json.dumps(one_shots, indent=True, ensure_ascii=False))
+        # save the curent completed task to one_shots if it's still not there
+        if current_task not in [o['task'] for o in one_shots]:
+            one_shots.append(
+                {
+                    "memory_id": "os-{0:09d}".format(len(one_shots)+1),
+                    "objective": self.objective,
+                    "task": current_task,
+                    "thoughts": cot[cot.lower().index('chain of thoughts:')+18:cot.lower().index('answer:')].strip(),
+                    "code": code.strip().strip('\n\n'),
+                    "keywords": eval(openai_call("I must analyze the following task name and action and write a list of keywords.\n"
+                                f"Task name: {current_task};\nAction: {code};\n\n"
+                                f"> I must write a python list cointaing only one string, and inside this string 3 or more keywords i.e: ['search, using pyautogui, using execution_agent, how to x, do y']\n"
+                                f"My answer:", max_tokens=2000))[0]
+                }
+            )
+            with open("memories/one-shots.json", 'w') as f:
+                f.write(json.dumps(one_shots, indent=True, ensure_ascii=False))
 
         return result
 
@@ -147,7 +149,7 @@ class AutonomousAgent:
 
     def memory_agent(self, caller,  content, goal):
         answer = openai_call(
-            prompts.memory_agent(self.objective,  caller,  content, goal, self.get_current_state)
+            prompts.memory_agent(self.objective, caller, content, goal, self.get_current_state)
         )
         answer = answer[answer.lower().index("answer:")+7:]
         action_func = exec(answer.replace("```", ""), self.__dict__)
