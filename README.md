@@ -1,6 +1,13 @@
 <h1 align="center">
- Babyagi, an Autonomous and Self-Improving agent: BASI
+ Babyagi, an Autonomous and Self-Improving agent: BASI<div style="display: none;">lisk</div>
 </h1>
+
+# Last changes
+
+The main changes are that now you can easily enable/disable/add the execution_agent tools, you can choose the amount of n-shots the agent will receive in its prompt, if the agent will keep running in continuous mode even with the list of empty tasks, and pinecone and serp are not activated by default.
+
+This repository will soon be updated to be compatible with the latest commits from the original babyagi.
+
 
 # Objective
 This Python script is an example of a LLM-powered autonomous agent. The system uses OpenAI API to create and execute tasks.
@@ -15,9 +22,9 @@ The script works by running an infinite loop that does the following steps:
 
 1- Write a function to finish the most relevant task (execution_agent);
  
-3- Save execution to memory if successful;
+2- Save execution to memory if successful (and only if the task does not yet exist in memory, in the future I will implement updates in the memories);
  
-2- Read the changes and pass them to execution_agent again (change_propagation_agent);
+3- Read the changes and pass them to execution_agent again or quit the program (change_propagation_agent);
 
 # Dynamic one-shot
 
@@ -30,12 +37,16 @@ Currently, I use gpt.3-5 to choose the one-shot from the execution_agent, but ma
 # BASI tools
 
 Both agents share the same "personality" and the same chore prompt. 
+To enable/disable execution_agent tools change the js object at ``tools/config.json``
 
 execution_agent tools:
 
 - openai_call
-- memory_agent (to retrieve and/or save information)
+- memory_agent (to retrieve and/or save information), disabled by default
 - execution_agent (it can call itself)
+- count_tokens
+- process_large_files
+- get_serp_query, disabled by default
 
 memory_agent tools:
 - openai_call
@@ -53,30 +64,28 @@ To use the script, you will need to follow these steps:
 1. Install the required packages: `pip install -r requirements.txt`
 2. Copy the .env.example file to .env: `cp .env.example .env`. This is where you will set the following variables.
 3. Set your OpenAI key and model in the OPENAI_API_KEY, OPENAPI_API_MODEL variables.
-4. Set your OpenAI and Pinecone API keys in the OPENAI_API_KEY, OPENAPI_API_MODEL, and PINECONE_API_KEY variables.
-5. Set the Pinecone environment in the PINECONE_ENVIRONMENT variable.
-6. Set the name of the table where the task results will be stored in the TABLE_NAME variable.
-7. Set the objective of the task management system in the OBJECTIVE variable. Alternatively you can pass it to the script as a quote argument.
+4. Set your OpenA in the OPENAI_API_KEY, OPENAPI_API_MODEL variables.
+6. Set the objective of the task management system in the OBJECTIVE variable. Alternatively you can pass it to the script as a quote argument.
 ```
 python babyagi.py ["<objective>"]
 ```
-8. Set the first task of the system in the FIRST_TASK variable.
+8. Set the task_list of the system in the TASK_LIST variable.
 9. Run the script.
 
 # Examples
 ```
 OBJECTIVE=I need to complete the first task
-FIRST_TASK=I must rickroll myself
+TASK_LIST=['I must rickroll myself', 'I must close the tab in which I rickrolled myself']
 ```
 
 ```
 OBJECTIVE=I need to complete the first task
-FIRST_TASK=I must analyze my cognitive archictecture during my chain of thoughts and then in my 'answer:' I will write 10 examples of multi_step_objective-first_task pairs to showcase my capabilities, I must append the result in the ./output2.txt file.
+TASK_LIST=['I must analyze my cognitive archictecture during my chain of thoughts and then in my 'answer:' I will write 10 examples of multi_step_objective-first_task pairs to showcase my capabilities, I must append the result in the ./output2.txt file.']
 ```
 
 ```
 OBJECTIVE=Improve my prompts at ./prompts.py file
-FIRST_TASK=Plan what to do. I must create a initial end-to-end task list, which the final task will make my objective completed.
+TASK_LIST=['Plan what to do. I must create a initial end-to-end task list, which the final task will make my objective completed.']
 ```
 
 ## Running in a container
