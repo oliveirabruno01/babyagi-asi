@@ -54,6 +54,6 @@ if __name__ == "__main__":
             print(Fore.MAGENTA+"\n\ncodename ChangePropagationAgent:"+Fore.RESET+f"\n{changes}")
         else:
             if consts.CONTINUOUS_MODE:
-                AI.execution_agent("I must create one or more tasks to keep following my objective (I can also change my objective)")
+                AI.execution_agent("I must create one or more tasks to keep following my objective.")
             else:
                 break
