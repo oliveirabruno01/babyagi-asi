@@ -59,38 +59,39 @@ class AutonomousAgent:
         if not root:
             print(Fore.LIGHTRED_EX + "\nExecution Agent call with task:" + Fore.RESET + f"{current_task}")
 
-        one_shots_names_and_kw = [f"name: '{one_shot['task']}', task_id: '{one_shot['memory_id']}', major objective: {one_shot['objective']}, keywords: '{one_shot['keywords']}';\n\n" for one_shot in all_one_shots]
-        code, cot = split_answer_and_cot(openai_call(f"My current task is: {current_task}. My current major objective is {self.objective}."
-                                      f"I must choose only the {consts.N_SHOT} most relevant tasks between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
-                                      f"I must write a list({consts.N_SHOT}) cointaining only the memory_ids of the {consts.N_SHOT} most relevant one_shots. i.e '[\"one_shot example memory_id\"]'."
-                                      f"I must read the examples' names and choose {consts.N_SHOT} by memory_id. I must answer in the format 'CHAIN OF THOUGHTS: here I put a short reasoning;\nANSWER: ['most relevant memory_id']';"
-                                      f"My answer:", max_tokens=800).strip("'"))
-        print(cot)
-        pattern = r'\[([^\]]+)\]'
-        completion = eval("["+re.findall(pattern, code)[0]+"]")
-        print(f"\nChosen one-shot example: {completion}\n")
-        one_shot_example_names = completion[:consts.N_SHOT] if len(completion) > 0 else None
+        if not current_task in [o['task'] for o in one_shots]:
+            one_shots_names_and_kw = [f"name: '{one_shot['task']}', task_id: '{one_shot['memory_id']}', major objective: {one_shot['objective']}, keywords: '{one_shot['keywords']}';\n\n" for one_shot in all_one_shots]
+            code, cot = split_answer_and_cot(openai_call(f"My current task is: {current_task}. My current major objective is {self.objective}."
+                                          f"I must choose only the {consts.N_SHOT} most relevant tasks between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
+                                          f"I must write a list({consts.N_SHOT}) cointaining only the memory_ids of the {consts.N_SHOT} most relevant one_shots. i.e '[\"one_shot example memory_id\"]'."
+                                          f"I must read the examples' names and choose {consts.N_SHOT} by memory_id. I must answer in the format 'CHAIN OF THOUGHTS: here I put a short reasoning;\nANSWER: ['most relevant memory_id']';"
+                                          f"My answer:", max_tokens=800).strip("'"))
+            print(cot)
+            pattern = r'\[([^\]]+)\]'
+            completion = eval("["+re.findall(pattern, code)[0]+"]")
+            print(f"\nChosen one-shot example: {completion}\n")
+            one_shot_example_names = completion[:consts.N_SHOT] if len(completion) > 0 else None
 
-        prompt = prompts.execution_agent(
-                self.objective,
-                self.completed_tasks,
-                self.get_current_state,
-                current_task,
-                [one_shot for one_shot in all_one_shots if one_shot["memory_id"] in one_shot_example_names] if one_shot_example_names is not None else '',
-                self.task_list
+            prompt = prompts.execution_agent(
+                    self.objective,
+                    self.completed_tasks,
+                    self.get_current_state,
+                    current_task,
+                    [one_shot for one_shot in all_one_shots if one_shot["memory_id"] in one_shot_example_names] if one_shot_example_names is not None else '',
+                    self.task_list
+                )
+            # print(Fore.LIGHTCYAN_EX + prompt + Fore.RESET)
+            changes = openai_call(
+                prompt,
+                .5,
+                4000-self.count_tokens(prompt),
             )
-        # print(Fore.LIGHTCYAN_EX + prompt + Fore.RESET)
-        changes = openai_call(
-            prompt,
-            .5,
-            4000-self.count_tokens(prompt),
-        )
 
-        print(Fore.LIGHTMAGENTA_EX+f"\n\ncodename ExecutionAgent:"+Fore.RESET+f"\n\n{changes}")
+            print(Fore.LIGHTMAGENTA_EX+f"\n\ncodename ExecutionAgent:"+Fore.RESET+f"\n\n{changes}")
 
-        # try until complete
-        result, code, cot = self.repl_agent(current_task, changes)
-        self.completed_tasks.append(current_task)
+            # try until complete
+            result, code, cot = self.repl_agent(current_task, changes)
+            self.completed_tasks.append(current_task)
 
         # save the curent completed task to one_shots if it's still not there
         if current_task not in [o['task'] for o in one_shots]:
@@ -107,8 +108,14 @@ class AutonomousAgent:
                                 f"My answer:", max_tokens=2000))[0]
                 }
             )
-            with open("memories/one-shots.json", 'w') as f:
+            with open("./memories/one-shots.json", 'w') as f:
                 f.write(json.dumps(one_shots, indent=True, ensure_ascii=False))
+
+        else:
+            cot, code = [[o['thoughts'], o['code']] for o in one_shots if o['task'] == current_task][0]
+            print(Fore.LIGHTMAGENTA_EX + f"\n\ncodename ExecutionAgent:" + Fore.RESET + f"\nChain of thoughts: {cot}\n\nAnswer:\n{code}")
+            action_func = exec(code, self.__dict__)
+            result = self.action(self)
 
         return result
 
