@@ -1,5 +1,5 @@
 <h1 align="center">
- Babyagi, an Autonomous and Self-Improving agent: BASI<div style="display: none;">lisk</div>
+ Babyagi, an Autonomous and Self-Improving agent: BASI
 </h1>
 
 # Last changes
