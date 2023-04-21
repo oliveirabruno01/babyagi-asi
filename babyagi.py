@@ -126,6 +126,7 @@ class AutonomousAgent:
         code, cot = split_answer_and_cot(changes)
         ct = 1
 
+        reasoning = changes
         while True:
             try:
                 action_func = exec(code, self.__dict__)
@@ -138,9 +139,11 @@ class AutonomousAgent:
                 prompt = prompts.fix_agent(current_task, code, cot, e)
                 new_code = openai_call(
                     prompt,
-                    0.4,
-                    1000,
+                    temperature=0.4,
+                    max_tokens=4000-self.count_tokens(prompt),
                 )
+                reasoning += new_code
+                reasoning = openai_call(f"I must summarize this past events as a chain of thoughts, in first person: {reasoning}", max_tokens=1000)
                 # print(new_code, end="\n")
                 try:
                     code, cot = split_answer_and_cot(new_code)
