@@ -1,10 +1,10 @@
 {
   "openai_call": {
-    "prompt": "- self.openai_call(prompt, ?temperature=0.4, ?max_tokens=200) -> str: runs an arbitrary LLM completion. I must use f-strings to pass values and context;\nI must use this ONLY when I need to handle LARGE texts and nlp processes with large data. To handle small nlp it's just I myself write as I'd write normally. Using all knowledge that I've learned from the Corpus of my training. openai_call tool doens't know anything about my computer or current task, so I always need to pass context to it using f-strings. e.g If I need to it edit a file I must pass the file content to it.;\n",
+    "prompt": "- self.openai_call(prompt, ?temperature=0.4, ?max_tokens=200) -> str: runs an arbitrary LLM completion. I must use f-strings to pass values and context;\nI must use this ONLY when I need to handle LARGE texts and nlp processes with large data. To handle small nlp it's just I myself write as I'd write normally. Using all knowledge that I've learned from the Corpus of my training. openai_call tool doens't know anything about my computer or current task, so I always need to pass context to it using f-strings. e.g If I need to it edit a file I must pass the file content to it like self.openai_call(f'Write the following code but implementing the feature 'dark button on hover'.\n\nCode:{file_content_var_here}').;\n",
     "enabled": true
   },
   "execution_agent": {
-    "prompt": "- self.execution_agent(task:str) -> str; I must use this if I need to run arbitrary code based on a dinamic value (i.e a openai response, a memory call or even another execution_agent);\n",
+    "prompt": "- self.execution_agent(task:str) -> str; I must use this if I need to run arbitrary code based on a dinamic value (i.e a openai response, a memory call or even another execution_agent);\nI must analyze what to do and how to do. I must remember that openai_call and execution_agent does not have inherent knoledge about my current state and context.\nE.g if I have to edit a local app/website, it might be better use another agents to analyze and make the changes instead just writing any bulshit.\ni.e: 'new_theme = self.openai_call(f'Write the following css file but in a volcano theme. File content: {file_content_var}.')' or 'self.execution_agent('Change the file at path/to/file.ext' to do X)' ",
     "enabled": true
   },
   "count_tokens": {
@@ -12,12 +12,12 @@
     "enabled": true
   },
   "process_large_text": {
-    "prompt": "- self.process_large_text(text:str, instruction:str, split_text:function, max_output_length=1000:int)->str, to process large texts with openai_call, it splits the text in chunks of max size of max_output_length given the specific split_text function (I must create a function to each case, sometimes it can be useful to just split using the chars count, but sometimes I might use some specific function to parse css, html, programming languages...)\n\n\nsplit_text function example:\ndef split_text(text, max_length):\n    # Split text into chunks of length at most max_length\n    chunks = []\n    while len(text) > 0:\n        chunk = text[:max_length]\n        text = text[max_length:]\n        chunks.append(chunk)\n    return chunks\n",
+    "prompt": "- self.process_large_text(text:str, instruction:str, split_text:function, max_output_length=1000:int)->str, it's like openai_call but for big files/texts, it splits the text in chunks of max size of max_output_length given the specific split_text function (I must create a function to each case, sometimes it can be useful to just split using the chars count, but sometimes I might use some specific function to parse css, html, programming languages...)\n\n\nsplit_text function example:\ndef split_text(text, max_length):\n    # Split text into chunks of length at most max_length\n    chunks = []\n    while len(text) > 0:\n        chunk = text[:max_length]\n        text = text[max_length:]\n        chunks.append(chunk)\n    return chunks\n",
     "enabled": true
   },
   "get_serp_query": {
     "prompt": "- self.get_serp_query_result(query: str, n: int) -> list of lists on format [['snippet', 'link'], ['snippet', 'link']], return the n most relevant results of a given query using SerpAPI (GoogleSearch);",
-    "enabled": false
+    "enabled": true
   },
   "memory_agent": {
     "prompt": "- self.memory_agent(caller:str, content:str, goal:goal) - str or True if there's no return string. This agent can handle memory I/O and can create severals types of memories. Avoid using this;\n",
