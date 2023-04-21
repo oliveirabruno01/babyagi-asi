@@ -137,12 +137,7 @@ Error: {str(e)};
 Fix: Rewrite the 'action' function.
 Previous action: {cot};
 
-#? IMPORTING LIBS
-I ALWAYS must import the external libs I will use...
-i.e: 
-"
-chain of thoughts: I must use subprocess to pip install pyautogui since it's not a built-in lib.
-answer:
+Available tools: {[tools[tool]['prompt'] for tool in tools if tools[tool]['enabled']]};
 
 To import external libraries, use the following format:
 "chain of thoughts: reasoning; answer: action function"
