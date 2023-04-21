@@ -3,10 +3,9 @@ from tools import serp_api
 from colorama import Fore
 from collections import deque
 from api import openai_call
+from utils import count_tokens
 
 openai.api_key = consts.OPENAI_API_KEY
-
-encoding = tiktoken.encoding_for_model("gpt-3.5-turbo" if not consts.USE_GPT4 else "gpt-4")
 
 one_shots, p_one_shots = [], []
 with open('memories/one-shots.json', 'r') as f:
@@ -31,7 +30,7 @@ class AutonomousAgent:
     def __init__(self, objective):
         (
             self.objective,
-            self.memory,
+            self.working_memory,
             self.chore_prompt,
             self.completed_tasks,
             self.task_id_counter,
@@ -48,7 +47,7 @@ class AutonomousAgent:
         hash = {"self": [nome for nome in dir(self) if not nome.startswith("__") and nome not in "search_in_index get_ada_embedding append_to_index memory_agent repl_agent task_list memory focus indexes"],
                 "To-do tasks list": self.task_list,
                 "Available indexes": [ind for ind in self.indexes.keys()],
-                "self.memory": self.memory,
+                "self.working_memory": self.working_memory,
                 "self.focus": self.focus,
                 "current dir": os.listdir(os.getcwd())}
         return hash
@@ -115,8 +114,8 @@ class AutonomousAgent:
             action_func = exec(code, self.__dict__)
             result = self.action(self)
 
-        summarizer_prompt = f"I must summarize my memory and the last event, I must answer as a chain of thoughts. Memory: {self.memory}, event: {cot} result: {result}."
-        self.memory = openai_call(summarizer_prompt, max_tokens=4000 - self.count_tokens(summarizer_prompt))
+        summarizer_prompt = f"I must summarize the 'working memory' and the last events, I must answer as a chain of thoughts, in first person, in the same verb tense of the 'event'. Working memory: {self.working_memory}, event: {cot} result: {result}. My answer:"
+        self.working_memory = openai_call(summarizer_prompt)
 
         return result
 
@@ -138,7 +137,6 @@ class AutonomousAgent:
                 new_code = openai_call(
                     prompt,
                     temperature=0.4,
-                    max_tokens=4000-self.count_tokens(prompt),
                 )
                 reasoning += new_code
                 reasoning = openai_call(f"I must summarize this past events as a chain of thoughts, in first person: {reasoning}", max_tokens=1000)
@@ -186,7 +184,7 @@ class AutonomousAgent:
         self.indexes[index_name].upsert(content)
 
     def count_tokens(self, text):
-        return len(encoding.encode(text))
+        return count_tokens(text)
 
     def process_large_text(self, text, instruction, split_text, max_output_length=1000):
         text_chunks = split_text(text, max_output_length)
@@ -196,7 +194,7 @@ class AutonomousAgent:
             prompt = f"Chunk {i + 1}/{len(text_chunks)}\n\nYou are an AI processing a text snippet, you must follow the instruction and answer just with the processed output. " \
                      f"If your chunk has any error or an abrupt ending, don't complete/fix it, you must just follow the instruction.\n\n" \
                      f"Instruction: {instruction}\n\nText chunk: {chunk}. You answer:"
-            processed_chunk = openai_call(prompt, role="assistant", max_tokens=4000-self.count_tokens(prompt))
+            processed_chunk = openai_call(prompt, role="assistant")
             processed_chunks.append(processed_chunk)
 
         print('\n'.join(processed_chunks))
