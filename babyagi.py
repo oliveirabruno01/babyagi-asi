@@ -39,8 +39,9 @@ class AutonomousAgent:
             self.task_list,
             self.indexes,
             self.focus,
-            self.get_serp_query_result
-        ) = (objective, [], prompts.chore_prompt, [], 1, openai_call, deque([]), {}, "", serp_api.get_serp_query_result)
+            self.get_serp_query_result,
+            self.current_task
+        ) = (objective, [], prompts.chore_prompt, [], 1, openai_call, deque([]), {}, "", serp_api.get_serp_query_result, "")
 
     def get_current_state(self):
         # filter properties to avoid adiction
@@ -53,6 +54,8 @@ class AutonomousAgent:
         return hash
 
     def execution_agent(self, current_task, root=False):
+        self.current_task = current_task
+
         if not root:
             print(Fore.LIGHTRED_EX + "\nExecution Agent call with task:" + Fore.RESET + f"{current_task}")
 
