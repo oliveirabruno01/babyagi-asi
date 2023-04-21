@@ -117,6 +117,9 @@ class AutonomousAgent:
             action_func = exec(code, self.__dict__)
             result = self.action(self)
 
+        summarizer_prompt = f"I must summarize my memory and the last event, I must answer as a chain of thoughts. Memory: {self.memory}, event: {cot} result: {result}."
+        self.memory = openai_call(summarizer_prompt, max_tokens=4000 - self.count_tokens(summarizer_prompt))
+
         return result
 
     def repl_agent(self, current_task, changes):
