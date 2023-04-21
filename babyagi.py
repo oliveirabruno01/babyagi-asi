@@ -93,8 +93,6 @@ class AutonomousAgent:
             result, code, cot = self.repl_agent(current_task, changes)
             self.completed_tasks.append(current_task)
 
-        # save the curent completed task to one_shots if it's still not there
-        if current_task not in [o['task'] for o in one_shots]:
             one_shots.append(
                 {
                     "memory_id": "os-{0:09d}".format(len(one_shots)+1),
@@ -198,7 +196,7 @@ class AutonomousAgent:
             prompt = f"Chunk {i + 1}/{len(text_chunks)}\n\nYou are an AI processing a text snippet, you must follow the instruction and answer just with the processed output. " \
                      f"If your chunk has any error or an abrupt ending, don't complete/fix it, you must just follow the instruction.\n\n" \
                      f"Instruction: {instruction}\n\nText chunk: {chunk}. You answer:"
-            processed_chunk = openai_call(prompt, role="assistant", max_tokens=1200)
+            processed_chunk = openai_call(prompt, role="assistant", max_tokens=4000-self.count_tokens(prompt))
             processed_chunks.append(processed_chunk)
 
         print('\n'.join(processed_chunks))
