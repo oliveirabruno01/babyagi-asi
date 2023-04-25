@@ -1,4 +1,6 @@
 .env
 .idea
 __pycache__
-memories/private-one-shots.json
+src/memories/private-one-shots.json
+src/outputs/
+src/tmp_agent.json

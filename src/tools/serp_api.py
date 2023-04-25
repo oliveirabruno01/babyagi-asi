@@ -2,7 +2,7 @@ import colorama
 from colorama import Fore
 from serpapi import GoogleSearch
 
-from consts import SERP_API_KEY, GLOBAL_HL, GLOBAL_GL, GLOBAL_LOCATION
+from src.consts import SERP_API_KEY, GLOBAL_HL, GLOBAL_GL, GLOBAL_LOCATION
 
 colorama.init()
 
