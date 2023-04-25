@@ -1,21 +1,11 @@
-import consts, pinecone
+import pinecone
+import consts, json
 from colorama import Fore
 from babyagi import AutonomousAgent
 from collections import deque
 
-print(Fore.RED + "\nOBJECTIVE\n" + Fore.RESET + consts.OBJECTIVE)
 
-AI = AutonomousAgent(consts.OBJECTIVE)
-
-# Append tasks from list in .env
-for i, task_name in enumerate(consts.TASKS_LIST):
-    task = {"task_id": i+1, "task_name": task_name}
-    AI.task_list.append(task)
-
-pinecone.init(api_key=consts.PINECONE_API_KEY, environment=consts.PINECONE_ENVIRONMENT)
-
-# Initialize Pinecone if enabled in .env
-if consts.PINECONE_DB:
+def pinecone_init(agent):
     pinecone.init(api_key=consts.PINECONE_API_KEY, environment=consts.PINECONE_ENVIRONMENT)
 
     # Create Pinecone index
@@ -30,7 +20,34 @@ if consts.PINECONE_DB:
 
     # Connect to the index
     index = pinecone.Index(table_name)
-    AI.indexes[table_name] = index
+    agent.indexes[table_name] = index
+
+
+def save_as_json(agent: AutonomousAgent, filepath):
+    with open(filepath, 'w') as f:
+        f.write(json.dumps({
+            "objective": agent.objective,
+            "working_memory": agent.working_memory,
+            "completed_tasks": agent.completed_tasks,
+            "task_id_counter": agent.task_id_counter,
+            "task_list": [task for task in list(agent.task_list) if task['task_name']],
+            "indexes": [index for index in agent.indexes.keys()],
+            "focus": agent.focus,
+        }))
+
+
+def load_from_json(filepath):
+    with open(filepath, 'r') as f:
+        agent_data = json.loads(f.read())
+        agent = AutonomousAgent(agent_data['objective'])
+        agent.working_memory = agent_data["working_memory"]
+        agent.completed_tasks = agent_data["completed_tasks"]
+        agent.task_id_counter = agent_data["task_id_counter"]
+        agent.task_list = deque([task for task in agent_data["task_list"] if task['task_name']])
+        indexes_names = agent_data["indexes"]
+        agent.focus = agent_data["focus"]
+
+    return agent
 
 
 if __name__ == "__main__":
