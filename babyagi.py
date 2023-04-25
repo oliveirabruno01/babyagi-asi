@@ -61,13 +61,14 @@ class AutonomousAgent:
         if not current_task in [o['task'] for o in one_shots]:
             one_shots_names_and_kw = [f"name: '{one_shot['task']}', task_id: '{one_shot['memory_id']}', major objective: {one_shot['objective']}, keywords: '{one_shot['keywords']}';\n\n" for one_shot in all_one_shots]
             code, cot = split_answer_and_cot(openai_call(f"My current task is: {current_task}. My current major objective is {self.objective}."
-                                          f"I must choose only the {consts.N_SHOT} most relevant tasks between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
-                                          f"I must write a list({consts.N_SHOT}) cointaining only the memory_ids of the {consts.N_SHOT} most relevant one_shots. i.e '[\"one_shot example memory_id\"]'."
-                                          f"I must read the examples' names and choose {consts.N_SHOT} by memory_id. I must answer in the format 'CHAIN OF THOUGHTS: here I put a short reasoning;\nANSWER: ['most relevant memory_id']';"
-                                          f"My answer:", max_tokens=800).strip("'"))
+                                          f"I must choose from 0 to {consts.N_SHOT} most relevant tasks between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
+                                          f"I must write a list({consts.N_SHOT}) cointaining only the memory_ids of the most relevant one_shots, or a empty list. i.e '[\"one_shot example memory_id\"]' or '[]'."
+                                          f"I must read the examples' names and choose from 0 to {consts.N_SHOT} by memory_id. I must answer in the format 'CHAIN OF THOUGHTS: here I put a short reasoning;\nANSWER: ['most relevant memory_id']';"
+                                          f"My answer:", max_tokens=300).strip("'"))
             print(cot)
             pattern = r'\[([^\]]+)\]'
-            completion = eval("["+re.findall(pattern, code)[0]+"]")
+            matches = re.findall(pattern, code)
+            completion = eval("["+matches[0]+"]") if matches else []
             print(f"\nChosen one-shot example: {completion}\n")
             one_shot_example_names = completion[:consts.N_SHOT] if len(completion) > 0 else None
 
