@@ -92,21 +92,31 @@ class AutonomousAgent:
             # try until complete
             result, code, cot = self.repl_agent(current_task, changes)
 
-            one_shots.append(
-                {
-                    "memory_id": "os-{0:09d}".format(len(one_shots)+1),
-                    "objective": self.objective,
-                    "task": current_task,
-                    "thoughts": cot[cot.lower().index('chain of thoughts:')+18:cot.lower().index('answer:')].strip(),
-                    "code": code.strip().strip('\n\n'),
-                    "keywords": eval(openai_call("I must analyze the following task name and action and write a list of keywords.\n"
-                                f"Task name: {current_task};\nAction: {code};\n\n"
-                                f"> I must write a python list cointaing only one string, and inside this string 3 or more keywords i.e: ['search, using pyautogui, using execution_agent, how to x, do y']\n"
-                                f"My answer:", max_tokens=2000))[0]
-                }
-            )
-            with open("./memories/one-shots.json", 'w') as f:
-                f.write(json.dumps(one_shots, indent=True, ensure_ascii=False))
+            save_task = True
+            if consts.USER_IN_THE_LOOP:
+                while True:
+                    inp = str(input('Do you want to save this action in memory? (Y/N)\n>')).lower()
+                    if inp in 'y yes n no':
+                        if inp[0] == 'n':
+                            save_task = False
+                        break
+
+            if save_task:
+                one_shots.append(
+                    {
+                        "memory_id": "os-{0:09d}".format(len(one_shots)+1),
+                        "objective": self.objective,
+                        "task": current_task,
+                        "thoughts": cot[cot.lower().index('chain of thoughts:')+18:cot.lower().index('answer:')].strip(),
+                        "code": code.strip().strip('\n\n'),
+                        "keywords": eval(openai_call("I must analyze the following task name and action and write a list of keywords.\n"
+                                    f"Task name: {current_task};\nAction: {code};\n\n"
+                                    f"> I must write a python list cointaing only one string, and inside this string 3 or more keywords i.e: ['search, using pyautogui, using execution_agent, how to x, do y']\n"
+                                    f"My answer:", max_tokens=2000))[0]
+                    }
+                )
+                with open("memories/one-shots.json", 'w') as f:
+                    f.write(json.dumps(one_shots, indent=True, ensure_ascii=False))
 
         else:
             cot, code = [[o['thoughts'], o['code']] for o in one_shots if o['task'] == current_task][0]
