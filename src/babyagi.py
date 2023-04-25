@@ -3,27 +3,13 @@ from tools import serp_api
 from colorama import Fore
 from collections import deque
 from api import openai_call
-from utils import count_tokens
+from common_utils import count_tokens, split_answer_and_cot, get_oneshots
+from utils import pinecone_utils, text_processing
 
 openai.api_key = consts.OPENAI_API_KEY
 
-one_shots, p_one_shots = [], []
-with open('memories/one-shots.json', 'r') as f:
-    one_shots += json.loads(f.read())
-
-with open('memories/private-one-shots.json', 'r') as f:
-    p_one_shots += json.loads(f.read())
-
+one_shots, p_one_shots = get_oneshots()
 all_one_shots = one_shots+p_one_shots
-
-
-def split_answer_and_cot(text):
-    start_index = text.lower().index("answer:")+7
-    end_index = text.lower().rfind("note:")
-
-    cot = text[:start_index]
-    code = text[start_index:end_index if end_index != -1 else len(text)].replace("```", "")
-    return [code, cot]
 
 
 class AutonomousAgent:
@@ -179,60 +165,20 @@ class AutonomousAgent:
         action_func = exec(answer.replace("```", ""), self.__dict__)
         result = self.action(self)
 
-    # Function to query records from the Pinecone index
     def search_in_index(self, index_name, query, top_k=1000):
-        results = self.indexes[index_name].query(query, top_k=top_k, include_metadata=True)
-        response = [f"{task.metadata['task']}:\n{task.metadata['result']}\n;" for task in results.matches]
-        return response
+        pinecone_utils.search_in_index(self, index_name, query, top_k=1000)
 
-    # Get embedding for the text
     def get_ada_embedding(self, text):
-        text = text.replace("\n", " ")
-        vector = openai.Embedding.create(input=[text], model="text-embedding-ada-002")["data"][0]["embedding"]
-        return vector
+        pinecone_utils.get_ada_embedding(text)
 
     def append_to_index(self, content, index_name):
-        # [(0, (0, 0), {"task": self.task_list[0]["task_name"], "result": "result"})]
-        self.indexes[index_name].upsert(content)
+        pinecone_utils.append_to_index(self, content, index_name)
 
     def count_tokens(self, text):
         return count_tokens(text)
 
     def process_large_text(self, text, instruction, max_output_length=1000, split_text=None):
-        text_chunks = split_text(text, max_output_length) if split_text is not None else [text[i:i+max_output_length] for i in range(0, len(text), max_output_length)]
-        processed_chunks = []
-        for i, chunk in enumerate(text_chunks):
-            print(i)
-            prompt = f"Chunk {i + 1}/{len(text_chunks)}\n\n" \
-                     f"You are an AI processing a text snippet, you must follow the instruction and answer just with the processed output. " \
-                     f"If your chunk has any error or an abrupt ending, don't complete/fix it, you must just follow the instruction.\n\n" \
-                     f"If generating a large text, or if the chunk is code and your instruction is extract info from the code, answer just with copied code." \
-                     f"If there's nothig to extract/return given the current chunk and instruction, write just 'nothing_on_chunk'." \
-                     f"Instruction: {instruction}\n\nText chunk: {chunk}. You answer:"
-            processed_chunk = openai_call(prompt, role="assistant")
-            if '__nothing_on_chunk' not in processed_chunk:
-                processed_chunks.append(processed_chunk)
-
-        print('\n'.join(processed_chunks))
-        return '\n'.join(processed_chunks)
+        return text_processing.process_large_text(text, instruction, max_output_length=1000, split_text=None)
 
     def generate_large_text(self, instruction, max_tokens_lenghts=10000):
-        text = ""
-        heading = "start"
-        # hardcoded, for gpt3.5
-        # counting chars but the right is to count tokens
-        while len(text) + 3500 < max_tokens_lenghts:
-            append_text = self.openai_call(f"I am generating a large text. {instruction[round(len(text)/2):]}. Heading: {heading}\n"
-                                           f"Current text (last 100 chars, I must continue seamlessly): '{text[:-100]}'.\n\n"
-                                           f"The continuation of the given text is:")
-            print(append_text)
-            text += append_text
-            heading = self.openai_call(f"I am generating a large text. My current heading: {heading}\n"
-                                       f"Current text. (last 100 chars, I must continue seamlessly): '{text[:-100]}'.\n\n"
-                                       f"Given the current text, what am I doing/heading? If the text is finished, I must answer with _end_of_text_. New heading:")
-            print(heading)
-            if '_end_of_text_' in heading.lower():
-                break
-
-        print(text)
-        return text
+        return text_processing.generate_large_text(instruction, max_tokens_lenghts=10000)
