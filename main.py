@@ -51,7 +51,42 @@ def load_from_json(filepath):
 
 
 if __name__ == "__main__":
+    if not consts.LOAD_FROM:
+        objective = consts.OBJECTIVE if not consts.USER_IN_THE_LOOP else str(
+            input(Fore.LIGHTYELLOW_EX + "Insert the objective: " + Fore.RESET))
+
+        print(Fore.RED + "\nOBJECTIVE\n" + Fore.RESET + objective)
+
+        AI = AutonomousAgent(objective)
+
+        # add tasks manually if .env tasks_list is empty
+        if len(consts.TASKS_LIST) == 0:
+            ct = 1
+            while True:
+                task = str(input(f"Add a task, insert a blank line to start: "))
+                if task.strip() == '':
+                    break
+                AI.task_list.append({"task_id": ct, "task_name": task})
+
+        # Append tasks from list in .env
+        for i, task_name in enumerate(consts.TASKS_LIST):
+            task = {"task_id": i + 1, "task_name": task_name}
+            AI.task_list.append(task)
+    else:
+        AI = load_from_json(consts.LOAD_FROM)
+
+    # Initialize Pinecone if enabled in .env
+    if consts.PINECONE_DB:
+        pinecone_init(AI)
+
+    running = True
+
     while True:
+        if not running:
+            filepath = str(input("Enter a file name or path to save the basi agent as a json file, or hit enter to quit without saving: "))
+            if filepath:
+                save_as_json(AI, filepath+".json")
+            break
         if AI.task_list:
             print(
                 Fore.GREEN
@@ -69,8 +104,26 @@ if __name__ == "__main__":
 
             print(Fore.YELLOW + "\n*TASK RESULT*\n" + Fore.RESET)
             print(Fore.MAGENTA+"\n\ncodename ChangePropagationAgent:"+Fore.RESET+f"\n{changes}")
+
+            save_as_json(AI, 'tmp_agent.json')
         else:
-            if consts.CONTINUOUS_MODE:
-                AI.execution_agent("I must create one or more tasks to keep following my objective.")
+            if consts.USER_IN_THE_LOOP:
+                AI.task_list = deque(AI.task_list)
+                new_task = str(input("Create a new task or hit enter to finish BASI: "))
+                if new_task.strip() == "":
+                    running = False
+                else:
+                    AI.task_list.append({'task_id': len(AI.task_list)+1, 'task_name': new_task})
+                    while True:
+                        task = str(input(f"Add a task, or insert a blank line to start: "))
+                        if task.strip() == '':
+                            break
+                        AI.task_list.append({"task_id": len(AI.task_list) + 1, "task_name": task})
+
             else:
-                break
+                if consts.CONTINUOUS_MODE:
+                    AI.execution_agent("I must create one or more tasks to keep following my objective.")
+                else:
+                    if consts.LOAD_FROM and not len(AI.task_list):
+                        print("Please, enable any USER_IN_THE_LOOP level to revive a basi agent. Or just edit its json file to include new tasks.")
+                    running = False
