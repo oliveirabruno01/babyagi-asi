@@ -124,7 +124,9 @@ class AutonomousAgent:
             action_func = exec(code, self.__dict__)
             result = self.action(self)
 
-        summarizer_prompt = f"I must summarize the 'working memory' and the last events, I must answer as a chain of thoughts, in first person, in the same verb tense of the 'event'. Working memory: {self.working_memory}, event: {cot} result: {result}. My answer:"
+        self.completed_tasks.append(current_task)
+        summarizer_prompt = f"I must summarize the 'working memory' and the last events, I must answer as a chain of thoughts, in first person, in the same verb tense of the 'event'. Working memory: {self.working_memory}, event: {cot} result: {result}. " \
+                            f"My answer must include the past workig memory and the new events and thoughts. If there's some error or fix in the event I must summarize it as a learning:"
         self.working_memory = openai_call(summarizer_prompt)
 
         return result
