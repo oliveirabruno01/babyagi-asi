@@ -91,7 +91,6 @@ class AutonomousAgent:
 
             # try until complete
             result, code, cot = self.repl_agent(current_task, changes)
-            self.completed_tasks.append(current_task)
 
             one_shots.append(
                 {
