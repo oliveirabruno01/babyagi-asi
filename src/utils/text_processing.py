@@ -1,4 +1,4 @@
-from src.api import openai_call
+from src.common_utils import openai_call
 
 
 def process_large_text(text, instruction, max_output_length=1000, split_text=None):

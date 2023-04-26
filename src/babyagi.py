@@ -2,8 +2,7 @@ import openai, prompts, consts, os, json, re
 from tools import serp_api
 from colorama import Fore
 from collections import deque
-from api import openai_call
-from common_utils import count_tokens, split_answer_and_cot, get_oneshots
+from common_utils import count_tokens, split_answer_and_cot, get_oneshots, openai_call
 from utils import pinecone_utils, text_processing
 
 openai.api_key = consts.OPENAI_API_KEY
