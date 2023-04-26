@@ -45,12 +45,15 @@ class AutonomousAgent:
             print(Fore.LIGHTRED_EX + "\nExecution Agent call with task:" + Fore.RESET + f"{current_task}")
 
         if not current_task in [o['task'] for o in one_shots]:
-            one_shots_names_and_kw = [f"name: '{one_shot['task']}', task_id: '{one_shot['memory_id']}', major objective: {one_shot['objective']}, keywords: '{one_shot['keywords']}';\n\n" for one_shot in all_one_shots]
-            code, cot = split_answer_and_cot(openai_call(f"My current task is: {current_task}. My current major objective is {self.objective}."
-                                          f"I must choose from 0 to {consts.N_SHOT} most relevant tasks between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
-                                          f"I must write a list({consts.N_SHOT}) cointaining only the memory_ids of the most relevant one_shots, or a empty list. i.e '[\"one_shot example memory_id\"]' or '[]'."
-                                          f"I must read the examples' names and choose from 0 to {consts.N_SHOT} by memory_id. I must answer in the format 'CHAIN OF THOUGHTS: here I put a short reasoning;\nANSWER: ['most relevant memory_id']';"
-                                          f"My answer:", max_tokens=300).strip("'"))
+            one_shots_names_and_kw = [f"name: '{one_shot['task']}', task_id: '{one_shot['memory_id']}', keywords: '{one_shot['keywords']}';\n\n" for one_shot in all_one_shots]
+            code, cot = split_answer_and_cot(openai_call(
+                f"My current task is: {current_task}."
+                f"I must choose from 0 to {consts.N_SHOT} most relevant tasks between the following one_shot examples:'\n{one_shots_names_and_kw}'.\n\n"
+                f"These oneshots will be injected in execution_agent as instant memories, task memory. I will try to choose {consts.N_SHOT} tasks memories that may help ExA. I will tell the relevant tasks by looking the names and keywords, and imagining what abilities ExA used to produce this memory."
+                f"I must write a list({consts.N_SHOT}) cointaining only the memory_ids of the most relevant one_shots, or a empty list. i.e '[\"one_shot example memory_id\"]' or '[]'."
+                f"I must read the examples' names and choose from 0 to {consts.N_SHOT} by memory_id. "
+                f"I must answer in the format 'CHAIN OF THOUGHTS: here I put a short reasoning;\nANSWER: ['most relevant memory_id']';"
+                f"My answer:", max_tokens=300).strip("'"))
             print(cot)
             pattern = r'\[([^\]]+)\]'
             matches = re.findall(pattern, code)
