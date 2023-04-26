@@ -12,8 +12,8 @@
     "enabled": true
   },
   "process_large_text": {
-    "prompt": "- self.process_large_text(text:str, instruction:str, split_text:function, max_output_length=1000:int)->str, it's like openai_call but for big files/texts, it splits the text in chunks of max size of max_output_length given the specific split_text function (I must create a function to each case, sometimes it can be useful to just split using the chars count, but sometimes I might use some specific function to parse css, html, programming languages...)\n\n\nsplit_text function example:\ndef split_text(text, max_length):\n    # Split text into chunks of length at most max_length\n    chunks = []\n    while len(text) > 0:\n        chunk = text[:max_length]\n        text = text[max_length:]\n        chunks.append(chunk)\n    return chunks\n",
-    "enabled": true
+    "prompt": "- self.process_large_text(text:str, instruction:str, ?max_output_length=1000:int, ?split_text=None:function)->str, it's like openai_call but for big files/texts, it splits the text in chunks given the specific split_text function (If I not pass any split_text or pass None, the text will be splitted in chunks of 1000 chars each. Either way I must create a function to each case, sometimes it can be useful to just split using the chars count, but sometimes I might use some specific function to parse css, html, programming languages...)\n\n\nsplit_text function example:\ndef split_text(text, max_length):\n    # Split text into chunks of length at most max_length\n    chunks = []\n    while len(text) > 0:\n        chunk = text[:max_length]\n        text = text[max_length:]\n        chunks.append(chunk)\n    return chunks\n",
+    "enabled": false
   },
   "get_serp_query": {
     "prompt": "- self.get_serp_query_result(query: str, n: int) -> list of lists on format [['snippet', 'link'], ['snippet', 'link']], return the n most relevant results of a given query using SerpAPI (GoogleSearch);",
