@@ -37,7 +37,7 @@ if __name__ == "__main__":
         objective = consts.OBJECTIVE if not consts.USER_IN_THE_LOOP else str(
             input(Fore.LIGHTYELLOW_EX + "Insert the objective: " + Fore.RESET))
 
-        print(Fore.RED + "\nOBJECTIVE\n" + Fore.RESET + objective)
+        print(Fore.RED + "\nOBJECTIVE\n" + Fore.RESET + objective + "\n\n")
 
         AI = AutonomousAgent(objective)
 
@@ -45,10 +45,12 @@ if __name__ == "__main__":
         if len(consts.TASKS_LIST) == 0:
             ct = 1
             while True:
-                task = str(input(f"Add a task, insert a blank line to start: "))
+                mid = ", or insert a blank line to start" if ct > 1 else ""
+                task = str(input(f"Add a task"+mid+": "))
                 if task.strip() == '':
                     break
                 AI.task_list.append({"task_id": ct, "task_name": task})
+                ct += 1
 
         # Append tasks from list in .env
         for i, task_name in enumerate(consts.TASKS_LIST):
@@ -65,7 +67,7 @@ if __name__ == "__main__":
 
     while True:
         if not running:
-            filepath = str(input("Enter a file name or path to save the basi agent as a json file, or hit enter to quit without saving: "))
+            filepath = str(input("\nEnter a file name or path to save the basi agent as a json file, or hit enter to quit without saving: "))
             if filepath:
                 save_as_json(AI, filepath+".json")
             break
@@ -91,7 +93,7 @@ if __name__ == "__main__":
         else:
             if consts.USER_IN_THE_LOOP:
                 AI.task_list = deque(AI.task_list)
-                new_task = str(input("Create a new task or hit enter to finish BASI: "))
+                new_task = str(input("\nCreate a new task or hit enter to finish BASI: "))
                 if new_task.strip() == "":
                     running = False
                 else:
@@ -107,5 +109,5 @@ if __name__ == "__main__":
                     AI.execution_agent("I must create one or more tasks to keep following my objective.")
                 else:
                     if consts.LOAD_FROM and not len(AI.task_list):
-                        print("Please, enable any USER_IN_THE_LOOP level to revive a basi agent. Or just edit its json file to include new tasks.")
+                        print("\nPlease, enable any USER_IN_THE_LOOP level to revive a basi agent. Or just edit its json file to include new tasks.")
                     running = False

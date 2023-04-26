@@ -83,7 +83,7 @@ class AutonomousAgent:
             save_task = True
             if consts.USER_IN_THE_LOOP:
                 while True:
-                    inp = str(input('Do you want to save this action in memory? (Y/N)\n>')).lower()
+                    inp = str(input('\nDo you want to save this action in memory? (Y/N)\n>')).lower()
                     if inp in 'y yes n no':
                         if inp[0] == 'n':
                             save_task = False
