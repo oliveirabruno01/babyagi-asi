@@ -98,10 +98,11 @@ class AutonomousAgent:
                         "task": current_task,
                         "thoughts": cot[cot.lower().index('chain of thoughts:')+18:cot.lower().index('answer:')].strip(),
                         "code": code.strip().strip('\n\n'),
-                        "keywords": eval(openai_call("I must analyze the following task name and action and write a list of keywords.\n"
+                        "keywords": ', '.join(eval(openai_call("I must analyze the following task name and action and write a list of keywords.\n"
                                     f"Task name: {current_task};\nAction: {code};\n\n"
-                                    f"> I must write a python list cointaing only one string, and inside this string 3 or more keywords i.e: ['search, using pyautogui, using execution_agent, how to x, do y']\n"
-                                    f"My answer:", max_tokens=2000))[0]
+                                    f"> I must write a python list cointaing strings, each string one relevant keyword that will be used by ExecutionAgent to retrieve this memories when needed."
+                                                     f" i.e: ['search', 'using pyautogui', 'using execution_agent', 'how to x', 'do y']\n"
+                                    f"My answer:", max_tokens=2000)))
                     }
                 )
                 with open("memories/one-shots.json", 'w') as f:
