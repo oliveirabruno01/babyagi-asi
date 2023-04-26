@@ -129,18 +129,37 @@ def action(self):
 
 def fix_agent(current_task, code, cot, e):
     return f"""
+I am BabyAGI, codename repl_agent; My current task is: {current_task};
+While running this code: 
+```
 BabyAGI (repl_agent) - current task: {current_task}
 Code:
 {code}
+```
+I faced this error: {str(e)};
+Now I must re-write the 'action' function, but fixed;
+In the previous code, which triggered the error, I was trying to: {cot};
 Error: {str(e)};
 Fix: Rewrite the 'action' function.
 Previous action: {cot};
 
-Available tools: {[tools[tool]['prompt'] for tool in tools if tools[tool]['enabled']]};
+#? IMPORTING LIBS
+I ALWAYS must import the external libs I will use...
+i.e: 
+"
+chain of thoughts: I must use subprocess to pip install pyautogui since it's not a built-in lib.
+answer:
 
+def action(self):
+    import os
+    os.system("pip install pyautogui")
+    ...
+    return "I have installed and imported pyautogui"
 To import external libraries, use the following format:
 "chain of thoughts: reasoning; answer: action function"
 
+
+I must answer in this format: 'chain of thoughts: step-by-step reasoning; answer: my real answer with the 'action' function'
 Example:
 "Thought: I need to install and import PyAutoGUI. Answer: import os; os.system('pip install pyautogui'); import pyautogui; return 'Installed and imported PyAutoGUI'"
 """
