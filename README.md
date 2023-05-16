@@ -1,6 +1,36 @@
 <h1 align="center">
- Babyagi, an Autonomous and Self-Improving agent: BASI
+ Babyagi, an Autonomous and Self-Improving agent. Nicknamed Christine, after Christine Brown. 
 </h1>
+
+
+
+# planned changes
+
+Implement bard api
+Implement llama cpp
+Implement recursive agent
+Implement planning agent
+Implement model choosing agent
+Fix one_shots system
+Implement list structures where possible
+Implement fine-tuning agent
+Implement miniGpt4 machine vision
+Implement comprehensive error handling
+Limit function of execution_agent
+Implement local long-term memory, include option for pinecone
+Create encoding agent
+Implement automatic tensor and ggml downloading, setup.py
+Implement an installer and exe executables
+Convert to .apk for mobile, use termux as a base
+Implement a checking agent, separate from change_propagation_agent
+Remove split_answer_and_cot due to encoding issues
+Initiate a low cost mode, and a free mode
+Impliment a limited code functions mode, remove recommendation for a docker container
+Impliment Wolfram Alpha api for higher computational functions
+Impliment bing chat API
+Current goal, have it play a successful game of Stellaris all by itself. 
+
+
 
 # Last changes
 
