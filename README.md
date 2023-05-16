@@ -62,7 +62,7 @@ This repository will soon be updated to be compatible with the latest commits fr
 
 
 # Objective
-This Python script is an example of a LLM-powered autonomous agent. The system uses OpenAI API to create and execute tasks.
+This Python script is an example of a LLM-powered autonomous agent. The system uses various LLM APIs and models to accomplish tasks.
 The core idea of the project is to provide the assistant with the tools it needs to do any task - if it's smart enough. 
 It can arbitrarily execute code and control its own flow and memory, for a sufficiently intelligent agent, either by pre-training, fine-tuning or prompt-optimization, this should be enough (if it is possible at all).
 
@@ -158,6 +158,6 @@ I recommend using this script in a virtual machine and always making a backup if
 BabyAGI is a pared-down version of the original [Task-Driven Autonomous Agent](https://twitter.com/yoheinakajima/status/1640934493489070080?s=20) (Mar 28, 2023, by @yoheynakajima)
 
 
-BASI is a modified version of BabyAGI created to show how LLMs can perform in the real world.
+Christine is a modified version of BabyAGI-asi.
 
 Made with focus by [@LatentLich](https://twitter.com/LatentLich)
