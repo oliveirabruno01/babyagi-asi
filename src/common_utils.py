@@ -7,8 +7,6 @@ import re
 encoding = tiktoken.encoding_for_model("gpt-3.5-turbo" if not consts.USE_GPT4 else "gpt-4")
 
 
-os.environ['_BARD_API_KEY']="Your api key here, remember to include the period."
-
 def bard_api_call(prompt, max_tokens=0, role="assistant"):
     messages = [
         {
