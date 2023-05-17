@@ -1,6 +1,58 @@
 <h1 align="center">
- Babyagi, an Autonomous and Self-Improving agent: BASI
+ Babyagi, an Autonomous and Self-Improving agent. Nicknamed Christine, after Christine Brown. 
 </h1>
+
+
+
+# planned changes
+
+Implement bard api
+
+Implement llama cpp
+
+Implement recursive agent
+
+Implement planning agent
+
+Implement model choosing agent
+
+Fix one_shots system
+
+Implement list structures where possible
+
+Implement fine-tuning agent
+
+Implement miniGpt4 machine vision
+
+Implement comprehensive error handling
+
+Limit function of execution_agent
+
+Implement local long-term memory, include option for pinecone
+
+Create encoding agent
+
+Implement automatic tensor and ggml downloading, setup.py
+
+Implement an installer and exe executables
+
+Convert to .apk for mobile, use termux as a base
+
+Implement a checking agent, separate from change_propagation_agent
+
+Remove or fix split_answer_and_cot due to encoding issues
+
+Initiate a low cost mode, and a free mode
+
+Impliment a limited code functions mode, remove recommendation for a docker container
+
+Impliment Wolfram Alpha api for higher computational functions
+
+Impliment bing chat API
+
+Current goal, have it play a successful game of Stellaris all by itself. 
+
+
 
 # Last changes
 
@@ -10,7 +62,7 @@ This repository will soon be updated to be compatible with the latest commits fr
 
 
 # Objective
-This Python script is an example of a LLM-powered autonomous agent. The system uses OpenAI API to create and execute tasks.
+This Python script is an example of a LLM-powered autonomous agent. The system uses various LLM APIs and models to accomplish tasks.
 The core idea of the project is to provide the assistant with the tools it needs to do any task - if it's smart enough. 
 It can arbitrarily execute code and control its own flow and memory, for a sufficiently intelligent agent, either by pre-training, fine-tuning or prompt-optimization, this should be enough (if it is possible at all).
 
@@ -65,12 +117,10 @@ To use the script, you will need to follow these steps:
 2. Copy the .env.example file to .env: `cp .env.example .env`. This is where you will set the following variables.
 3. Set your OpenAI key and model in the OPENAI_API_KEY, OPENAPI_API_MODEL variables.
 4. Set your OpenA in the OPENAI_API_KEY, OPENAPI_API_MODEL variables.
-6. Set the objective of the task management system in the OBJECTIVE variable. Alternatively you can pass it to the script as a quote argument.
-```
-python babyagi.py ["<objective>"]
-```
+6. Set the objective of the task management system in the OBJECTIVE variable.
+7. Copy contents of src folder to main directory, keep src as backup
 8. Set the task_list of the system in the TASK_LIST variable.
-9. Run the script.
+9. Run python main.py
 
 # Examples
 ```
@@ -80,12 +130,12 @@ TASK_LIST=['I must rickroll myself', 'I must close the tab in which I rickrolled
 
 ```
 OBJECTIVE=I need to complete the first task
-TASK_LIST=['I must analyze my cognitive archictecture during my chain of thoughts and then in my 'answer:' I will write 10 examples of multi_step_objective-first_task pairs to showcase my capabilities, I must append the result in the ./output2.txt file.']
+TASK_LIST=["I must analyze my cognitive archictecture during my chain of thoughts and then in my 'answer:' I will write 10 examples of multi_step_objective-first_task pairs to showcase my capabilities, I must append the result in the ./output2.txt file."]
 ```
 
 ```
 OBJECTIVE=Improve my prompts at ./prompts.py file
-TASK_LIST=['Plan what to do. I must create a initial end-to-end task list, which the final task will make my objective completed.']
+TASK_LIST=["Plan what to do. I must create a initial end-to-end task list, which the final task will make my objective completed."]
 ```
 
 ## Running in a container
@@ -106,6 +156,6 @@ I recommend using this script in a virtual machine and always making a backup if
 BabyAGI is a pared-down version of the original [Task-Driven Autonomous Agent](https://twitter.com/yoheinakajima/status/1640934493489070080?s=20) (Mar 28, 2023, by @yoheynakajima)
 
 
-BASI is a modified version of BabyAGI created to show how LLMs can perform in the real world.
+Christine is a modified version of BabyAGI-asi.
 
 Made with focus by [@LatentLich](https://twitter.com/LatentLich)

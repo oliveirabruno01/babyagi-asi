@@ -1,26 +1,30 @@
 {
   "openai_call": {
-    "prompt": "- self.openai_call(prompt, ?temperature=0.4, ?max_tokens=200) -> str: runs an arbitrary LLM completion. I must use f-strings to pass values and context;\nI must use this ONLY when I need to handle dynamic texts and nlp processes. To handle information in my memory, prompt or context it's just I write a string as a LLM, using all knowledge that I've learned from the Corpus of my training. I must use openai_call when I don't know the content of a string/text and must examine it without knowing its content. I.e I can use it to find specific info in a text, to edit some text, to synthetize new text based on a prompt or f-string. openai_call doesn't have internet access nor can access/write files on the computer. It can only return a text response based on a prompt that might be a f-string.",
+    "prompt": "- self.openai_call(prompt, ?temperature=0.4, ?max_tokens=200) -> str: runs an arbitrary LLM completion to OpenAI GPT-3.5 model...",
     "enabled": true
   },
   "execution_agent": {
-    "prompt": "- self.execution_agent(task:str) -> str; I must use this if I need to run arbitrary code based on a dinamic value (i.e a openai response, a memory call or even another execution_agent);\nI must analyze what to do and how to do.",
+    "prompt": "- self.execution_agent(task:str) -> str; I must use this if I need to run arbitrary code...",
     "enabled": true
   },
   "count_tokens": {
-    "prompt": "- self.count_tokens(text:str) -> int; to count the ammount of tokens of a given string, I need to use this when handling with large files/data, and when I don't know the size of the data;",
+    "prompt": "- self.count_tokens(text:str) -> int; to count the ammount of tokens of a given string...",
     "enabled": true
   },
   "process_large_text": {
-    "prompt": "- self.process_large_text(text:str, instruction:str, ?max_output_length=1000:int, ?split_text=None:function)->str, it's like openai_call but for big files/texts, it splits the text in chunks given the specific split_text function (If I not pass any split_text or pass None, the text will be splitted in chunks of 1000 chars each. Either way I must create a function to each case, sometimes it can be useful to just split using the chars count, but sometimes I might use some specific function to parse css, html, programming languages...)\n\n\nsplit_text function example:\ndef split_text(text, max_length):\n    # Split text into chunks of length at most max_length\n    chunks = []\n    while len(text) > 0:\n        chunk = text[:max_length]\n        text = text[max_length:]\n        chunks.append(chunk)\n    return chunks\n",
+    "prompt": "- self.process_large_text(text:str, instruction:str, ?max_output_length=1000:int, ?split_text=None:function)->str...",
     "enabled": false
   },
   "get_serp_query": {
-    "prompt": "- self.get_serp_query_result(query: str, n: int) -> list of lists on format [['snippet', 'link'], ['snippet', 'link']], return the n most relevant results of a given query using SerpAPI (GoogleSearch);",
+    "prompt": "- self.get_serp_query_result(query: str, n: int) -> list of lists on format [['snippet', 'link'], ['snippet', 'link']]...",
     "enabled": true
   },
   "memory_agent": {
-    "prompt": "- self.memory_agent(caller:str, content:str, goal:goal) - str or True if there's no return string. This agent can handle memory I/O and can create severals types of memories. Avoid using this;\n",
-    "enabled": false
+    "prompt": "- self.memory_agent(caller:str, content:str, goal:goal) - str or True if there's no return string. This agent can handle memory I/O...",
+    "enabled": true
+  },
+  "bard_api_call": {
+    "prompt": "- self.bard_api_call(prompt:str, ?role='assistant':str) -> str: runs an arbitrary LLM completion to the Google Bard model...",
+    "enabled": true
   }
 }
