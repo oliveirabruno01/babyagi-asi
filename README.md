@@ -118,6 +118,7 @@ To use the script, you will need to follow these steps:
 3. Set your OpenAI key and model in the OPENAI_API_KEY, OPENAPI_API_MODEL variables.
 4. Set your OpenA in the OPENAI_API_KEY, OPENAPI_API_MODEL variables.
 6. Set the objective of the task management system in the OBJECTIVE variable.
+7. Copy contents of src folder to main directory, keep src as backup
 ```
 python main.py
 ```
