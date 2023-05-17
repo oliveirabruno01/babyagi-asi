@@ -24,8 +24,9 @@ class AutonomousAgent:
             self.indexes,
             self.focus,
             self.get_serp_query_result,
-            self.current_task
-        ) = (objective, [], prompts.chore_prompt, [], 1, bard_api_call, deque([]), {}, "", serp_api.get_serp_query_result, "")
+            self.current_task,
+            self.bard_api_call
+        ) = (objective, [], prompts.chore_prompt, [], 1, bard_api_call, deque([]), {}, "", serp_api.get_serp_query_result, "", bard_api_call)
 
     def get_current_state(self):
         # filter properties to avoid adiction
