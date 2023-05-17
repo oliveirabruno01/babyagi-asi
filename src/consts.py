@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+_BARD_API_KEY = os.getenv('_BARD_API_KEY', "")
 USE_GPT4 = False
 
 GLOBAL_HL = os.getenv("GLOBAL_HL", "")
