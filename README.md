@@ -120,10 +120,7 @@ To use the script, you will need to follow these steps:
 6. Set the objective of the task management system in the OBJECTIVE variable.
 7. Copy contents of src folder to main directory, keep src as backup
 8. Set the task_list of the system in the TASK_LIST variable.
-9. Run 
-...
-python main.py
-...
+9. Run python main.py
 
 # Examples
 ```
