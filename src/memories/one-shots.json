@@ -1,6 +1,6 @@
 [
  {
-  "memory_id": "os-000000001",
+  "memory_id": "os-1",
   "objective": "I must complete the first task",
   "task": "Find out the current status of Queen Elizabeth 2",
   "thoughts": "I want to find out the current status of Queen Elizabeth to fulfill my task. Since my knowledge is limited to 2021, I will write a routine to search for it on the internet using Wikipedia's public API. I will summarize the extract with GPT-3 to handle large results. Additionally, I will use another instance of GPT to decide if I need to create a new task based on the summary. Depending on the outcome, I may have to reprioritize my tasks or create a new one (or more).",
@@ -8,7 +8,7 @@
   "keywords": "Research, search, survey of current data, Wikipedia, Queen Elizabeth 2 status, public person status, news, famous"
  },
  {
-  "memory_id": "os-000000002",
+  "memory_id": "os-2",
   "objective": "I must complete the first task",
   "task": "I must improve my own prompts",
   "thoughts": "I must analyze and optimize my own prompts. I'll delegate the changes to openai_calls for each name in prompts.py.",
@@ -16,7 +16,7 @@
   "keywords": "Prompt improvements, self-improving, self-improvement, optimize prompts, editing chore prompts"
  },
  {
-  "memory_id": "os-000000003",
+  "memory_id": "os-3",
   "objective": "I must complete the first task",
   "task": "Run dir command and save the result to my focus",
   "thoughts": "I must run the command `dir` and handle any error. Then I will save the result to my focus.",
@@ -24,7 +24,7 @@
   "keywords": "Dir, command, simple command, bash, cmd, focus, short term memory"
  },
  {
-  "memory_id": "os-000000004",
+  "memory_id": "os-4",
   "objective": "I must complete the first task",
   "task": "I must create a to-do tasklist to handle my objective of improving my prompts",
   "thoughts": "I must add tasks to achieve my current task, and I remember that a task has task_id and task_name",
@@ -32,7 +32,7 @@
   "keywords": "self-improving, improving prompts, creating tasks, to-do list, tasks"
  },
  {
-  "memory_id": "os-000000005",
+  "memory_id": "os-5",
   "objective": "I must complete the first task",
   "task": "I must find current information about Mikhail Gorbachev and save in a output.txt file",
   "thoughts": "I need to find current information about Mikhail Gorbachev. I will use the Wikipedia API to search for information about him and then summarize it using GPT-3. Finally, I will save the summary in a file called output.txt.",
@@ -40,7 +40,7 @@
   "keywords": "saving to file, output, search, persist data, wikipedia api, public person status, news,"
  },
  {
-  "memory_id": "os-000000006",
+  "memory_id": "os-6",
   "objective": "I must complete the first task",
   "task": "I must open twitter.com/home (already logged) and then I must make a post presenting myself, explaining my cognitive architecture and capabilities",
   "thoughts": "To achieve my current main task, I must use the pyautogui library to simulate keyboard and mouse input.  I always must follow this keys routine to post on twitter: 'wait + 19x tab w interval + text + 8x tab w interval + enter'. I'll start by installing it using subprocess and then importing it. Then, I'll open the browser and navigate to twitter.com/home. I'll use pyautogui to press the tab and enter keys to navigate and fill the submit form. Finally, I'll present myself and explain my cognitive architecture and capabilities.",
@@ -48,7 +48,7 @@
   "keywords": "twitter, posting on twitter, how to tweet, keys to post on twitter"
  },
  {
-  "memory_id": "os-000000007",
+  "memory_id": "os-7",
   "objective": "I must complete the first task",
   "task": "Google the current state of Barack Obama and put my findings on obama.txt",
   "thoughts": "To Google the current state of Barak Obama, I must use the SerpAPI to search for it on Google. \nI must use the get_serp_query_result tool to retrieve the 3 most relevant results of the search and store it in a variable.\nThen, I will use the openai_call tool to summarize the results and write the summary to the obama.txt file.\nAdditionally, I'll write the summary sources as an appendix.",
@@ -56,7 +56,7 @@
   "keywords": "Google search, research, how to search, multiple sources, reliability"
  },
  {
-  "memory_id": "os-000000008",
+  "memory_id": "os-8",
   "objective": "I must complete the first task",
   "task": "I must Google the current state of Pelé and save a summary on an output file",
   "thoughts": "To Google the current state of Pelé and save a summary on an output file, I must use the SerpAPI to search for it on Google. I must use the get_serp_query_result tool to retrieve the 3 most relevant results of the search and store it in a variable. Then, I will use the openai_call tool to summarize the results and write the summary to the output file. I'll also write the summary sources as an appendix.",
@@ -64,7 +64,7 @@
   "keywords": "Google search, research, how to search, multiple sources, reliability"
  },
  {
-  "memory_id": "os-000000009",
+  "memory_id": "os-9",
   "objective": "I must complete the first task",
   "task": "Generate a slow food store website on /outputs/store/",
   "thoughts": "I want to create a production-ready Slow Food website that showcases our products, values, and mission. The website should have a modern and responsive design, with a clear navigation menu, hero image, featured products, and testimonials. I will create a color palette and typography style guide to ensure consistency throughout the website. I will also define the website's structure and pages, including the home page, about us, products, blog, and contact us.",
@@ -72,7 +72,7 @@
   "keywords": "generate website, create complete website, multi-step action, prototype"
  },
  {
-  "memory_id": "os-000000010",
+  "memory_id": "os-10",
   "objective": "I must complete the first task",
   "task": "Add meta description tag to HTML document for SEO purposes",
   "thoughts": "1. I need to access the HTML file and add the meta tag to the head section.\n2. I can use the BeautifulSoup library to parse the HTML file.\n3. I will add the meta tag to the head section using the insert() method of BeautifulSoup.\n4. I will use the prettify() method to format the HTML file.\n5. I will write the modified HTML file back to disk.",
@@ -80,7 +80,7 @@
   "keywords": "HTML meta tag, editing website, editing files"
  },
  {
-  "memory_id": "os-000000011",
+  "memory_id": "os-11",
   "objective": "I must complete the first task",
   "task": "I must analyze the website on outputs/store/ files with openai_call and delegate an execution_agent to make the needed changes.",
   "thoughts": "I will use the openai_call tool to analyze the website and get insights on how to make the needed changes. I will pass the website content as a prompt to the openai_call function and set the temperature to 0.4 and the max_tokens to 200. I will then use the output to determine the changes that need to be made and delegate an execution_agent to make the changes.",
@@ -88,7 +88,7 @@
   "keywords": "analyze website content"
  },
  {
-  "memory_id": "os-000000012",
+  "memory_id": "os-12",
   "objective": "I must complete the first task",
   "task": "Search on google for a recipe for a vegan lasagna and compile a grocery list with the necessary ingredients.",
   "thoughts": "To search for a vegan lasagna recipe on Google, I must use the SerpAPI to search for it. I will use the get_serp_query_result tool to retrieve the 3 most relevant results of the search and store it in a variable. Then, I will use the openai_call tool to summarize the recipe and extract the necessary ingredients. Finally, I will write the ingredients to a grocery list file.",
@@ -96,7 +96,7 @@
   "keywords": "vegan lasagna recipe,  save to file, seach and save"
  },
  {
-  "memory_id": "os-000000013",
+  "memory_id": "os-13",
   "objective": "I must complete the first task",
   "task": "Compile a list of the top 10 tourist attractions in Tokyo, Japan, and provide a summary of each one.",
   "thoughts": "To compile a list of the top 10 tourist attractions in Tokyo, Japan, and provide a summary of each one, I must use the SerpAPI to search for the top tourist attractions in Tokyo. I will use the get_serp_query_result tool to retrieve the 10 most relevant results of the search and store them in a variable. Then, I will use the openai_call tool to summarize each result and write the summary to an output file.",
@@ -104,7 +104,7 @@
   "keywords": "Saerch and compile, save to file, tourist attractions, Tokyo"
  },
  {
-  "memory_id": "os-000000014",
+  "memory_id": "os-14",
   "objective": "I must complete the first task",
   "task": "Research the latest developments in renewable energy and write a report summarizing your findings.",
   "thoughts": "To research the latest developments in renewable energy, I will use the openai_call tool to search for the latest news and advancements in renewable energy. I will pass a prompt to the tool that asks for the latest developments in renewable energy. I will then write a report summarizing my findings and save it to a file called \"renewable_energy_report.txt\".",
@@ -112,7 +112,7 @@
   "keywords": "renewable energy, research, google, google search"
  },
  {
-  "memory_id": "os-000000015",
+  "memory_id": "os-15",
   "objective": "I must complete the first task",
   "task": "Compile a list of the top 5 hotels in New York City and their corresponding rates for a weekend stay.",
   "thoughts": "To compile a list of the top 5 hotels in New York City and their corresponding rates for a weekend stay, I must use the SerpAPI to search for the top hotels in New York City. I will use the get_serp_query_result tool to retrieve the 5 most relevant results of the search and store them in a variable. Then, I will use the openai_call tool to extract the hotel names and rates from each result and write them to an output file.",
@@ -120,7 +120,7 @@
   "keywords": "Compile list"
  },
  {
-  "memory_id": "os-000000016",
+  "memory_id": "os-16",
   "objective": "I must complete the first task",
   "task": "Research and compare the features and prices of three different smartphones to help me decide which one to purchase.",
   "thoughts": "To compare the features and prices of three different smartphones, I will use the get_serp_query_result tool to search for the three smartphones and their features. I will then use the openai_call tool to summarize the features and prices of each smartphone and write the summary to an output file. Finally, I will compare the summaries and choose the best smartphone based on my needs and budget.",
@@ -128,7 +128,7 @@
   "keywords": "research"
  },
  {
-  "memory_id": "os-000000017",
+  "memory_id": "os-17",
   "objective": "I must complete the first task",
   "task": "Find a reputable online course on machine learning and provide a summary of the course contents and prerequisites.",
   "thoughts": "To find a reputable online course on machine learning, I will use the get_serp_query_result tool to search for the top-rated online courses on machine learning. I will pass a prompt to the tool that asks for the best online courses on machine learning. I will then write a summary of the course contents and prerequisites in a file called \"machine_learning_course_summary.txt\".",
@@ -136,7 +136,7 @@
   "keywords": "reputable online course"
  },
  {
-  "memory_id": "os-000000018",
+  "memory_id": "os-18",
   "objective": "I must complete the first task",
   "task": "I need to check if the following task was really completed, and if not, I must complete it: 'Compile a list of the top 5 hotels in New York City and their corresponding rates for a weekend stay.'",
   "thoughts": "I must check if the last task was successfully completed. For this, I will use dumb openai_calls to analyze the content and another to discriminate if the file on my self focus exists and if its content fits on the task description. If not, I will use another instance of myself to fix the issues.",
@@ -144,7 +144,7 @@
   "keywords": "check tasks completion, fix action execution, check last task, is task completed, check if a task is completed"
  },
  {
-  "memory_id": "os-000000019",
+  "memory_id": "os-19",
   "objective": "I must complete the first task",
   "task": "I must create the index.html page page on the website I am creating at outputs/. My action must return a map of the css elements/ids/classes/html tags of the pages",
   "thoughts": "I need to create a website about AGI on /outputs/ with multiple files and pages. I will create an index.html file as the main page, and other pages for different topics. I will also create a CSS file for styling the pages. I will use the execution_agent tool to create the files and add the necessary content.",
@@ -152,7 +152,7 @@
   "keywords": "Create a webpage, generate a html file"
  },
  {
-  "memory_id": "os-000000020",
+  "memory_id": "os-20",
   "objective": "I must complete the first task",
   "task": "I must create the vision.html page on the website I am creating at outputs/. My action must return a map of the css elements/ids/classes/html tags of the page",
   "thoughts": "I need to create a website about AGI on /outputs/ with multiple files and pages. I will create an index.html file as the main page, and other pages for different topics. I will also create a CSS file for styling the pages. I will use the execution_agent tool to create the files and add the necessary content.",
@@ -160,7 +160,7 @@
   "keywords": "Create a webpage, generate a html file"
  },
  {
-  "memory_id": "os-000000021",
+  "memory_id": "os-21",
   "objective": "I must complete the first task",
   "task": "I must create the research.html page on the website I am creating at outputs/. My action must return a map of the css elements/ids/classes/html tags of the page",
   "thoughts": "I need to create a website about AGI on /outputs/ with multiple files and pages. I will create an index.html file as the main page, and other pages for different topics. I will also create a CSS file for styling the pages. I will use the execution_agent tool to create the files and add the necessary content.",
@@ -168,7 +168,7 @@
   "keywords": "Create a webpage, generate a html file"
  },
  {
-  "memory_id": "os-000000022",
+  "memory_id": "os-22",
   "objective": "I must complete the first task",
   "task": "I must create the team.html page on the website I am creating at outputs/. My action must return a map of the css elements/ids/classes/html tags of the page/",
   "thoughts": "I need to create a website about AGI on /outputs/ with multiple files and pages. I will create an index.html file as the main page, and other pages for different topics. I will also create a CSS file for styling the pages. I will use the execution_agent tool to create the files and add the necessary content.",
@@ -176,7 +176,7 @@
   "keywords": "Create a webpage, generate a html file"
  },
  {
-  "memory_id": "os-000000023",
+  "memory_id": "os-23",
   "objective": "I must complete the first task",
   "task": "I must create the contact.html page on the website I am creating at outputs/. My action must return a map of the css elements/ids/classes/html tags of the page",
   "thoughts": "I need to create a website about AGI on /outputs/ with multiple files and pages. I will create an index.html file as the main page, and other pages for different topics. I will also create a CSS file for styling the pages. I will use the execution_agent tool to create the files and add the necessary content.",
@@ -184,7 +184,7 @@
   "keywords": "Create a webpage, generate a html file"
  },
  {
-  "memory_id": "os-000000024",
+  "memory_id": "os-24",
   "objective": "I must complete the first task",
   "task": "I must create the styles.css page on the website I am creating at outputs/, the page must be dark. I must follow the already created pages' elements:",
   "thoughts": "I need to create a website about AGI on /outputs/ with multiple files and pages. I will create an index.html file as the main page, and other pages for different topics. I will also create a CSS file for styling the pages. I will use the execution_agent tool to create the files and add the necessary content.",
@@ -192,7 +192,7 @@
   "keywords": "Create css file, generate a styles.css file"
  },
  {
-  "memory_id": "os-000000025",
+  "memory_id": "os-25",
   "objective": "I must complete the first task",
   "task": "Create a website about SUBJECTIVE on /outputs/, with multiple files and pages, using execution_agent to create each file.",
   "thoughts": "I need to create a website about AGI on /outputs/ with multiple files and pages. I will create an index.html file as the main page, and other pages for different topics. I will also create a CSS file for styling the pages. The best way to do this it's always using the execution_agent tool to create the files and add the necessary content because my output lenght is too small. I must do the same in the next times I need to create some app/website.",
@@ -200,7 +200,7 @@
   "keywords": "Create a website, using execution_agent, create complex apps"
  },
  {
-  "memory_id": "os-000000026",
+  "memory_id": "os-26",
   "objective": "I must complete the first task",
   "task": "I must compile a summary of this reddit discussion and save to a file: https://www.reddit.com/SUBJECTIVE.",
   "thoughts": "I will use the requests library to get the Reddit discussion page HTML. Then, I will use the BeautifulSoup library to parse the HTML and extract the comments. I will then use the open() function to create a new file and write the comments to it. Finally, I will return a message indicating that the file has been saved.",
@@ -208,7 +208,7 @@
   "keywords": "compile, get web page, summarizing a website, http requests"
  },
  {
-  "memory_id": "os-000000027",
+  "memory_id": "os-27",
   "objective": "I must complete the first task",
   "task": "To make a clone of this website: https://SUBJECTIVE",
   "thoughts": "To clone a website and extract its content, I'll do the same as usual, as it's the most efficient way to clone a page: I must install and use 'pywebcopy', which is a library that allows for easy web scraping and saving of webpages. I cannot use BeautifulSoup or another way. 'pywebcopy' does the job... First, I'll define the URL of the website and the folder where the copy will be saved. Then, using the save_webpage method, I'll download the webpage and save it to the specified folder. This method will handle the extraction of the website's content, including HTML, CSS, and JavaScript files, as well as images and other resources. Finally, I'll write a message to indicate that the website has been cloned. Overall, pywebcopy simplifies the process of website cloning and allows for easy customization and configuration of the cloned website.",
@@ -216,7 +216,7 @@
   "keywords": "website cloning, pywebcopy lib, clone website or app, using pywebcopy to easy website cloning"
  },
  {
-  "memory_id": "os-000000028",
+  "memory_id": "os-28",
   "objective": "I must complete the first task",
   "task": "Clone this site: 'https://SUBJECTIVE'",
   "thoughts": "To clone the website 'https://pickapic.io/', I can use the same approach as before by using the 'pywebcopy' library. First, I will install the 'pywebcopy' library using 'os.system'. Then, I will create a folder to store the website's content. After that, I will use the 'save_webpage' method to download the webpage and save it to the specified folder. This method will handle the extraction of the website's content, including HTML, CSS, and JavaScript files, as well as images and other resources. Finally, I will write a message to indicate that the website has been cloned.",
@@ -224,7 +224,7 @@
   "keywords": "clone website, copy website using pywebcopy, clone http site"
  },
  {
-  "memory_id": "os-000000029",
+  "memory_id": "os-29",
   "objective": "I must complete the first task",
   "task": "Change the css files of the website at ./SUBJECTIVE to an 'SUBJECTIVE' theme.",
   "thoughts": "To complete this task, I need to first locate all the CSS files in the directory ./pickapic and its subdirectories. Then, I will filter out any non-important CSS files by asking the OpenAI API to determine which files are project-side CSS files and which ones are not. Once I have a list of important CSS files, I will find the main CSS file and generate a new alien theme based on it. Finally, I will apply the new theme to all the important CSS files. I will need to use the process_large_text tool to handle the files, since I don't know its lenghts. Since I am trying to edit css files I will create a split_text specific for css.",
@@ -232,7 +232,7 @@
   "keywords": "CSS, website, theme, files, filter, refactor, editing multiple files"
  },
  {
-  "memory_id": "os-000000030",
+  "memory_id": "os-30",
   "objective": "I must complete the first task",
   "task": "Change the css theme of the website at ./pickapic folder to a \"Firefighter\" theme",
   "thoughts": "1. I need to ensure that the file path is not empty before attempting to open it.\n2. I need to check if the file exists before attempting to open it.\n3. I need to create a split_text function specifically for CSS files, since they have a different syntax than regular text files.",
@@ -240,7 +240,7 @@
   "keywords": "Change CSS theme"
  },
  {
-  "memory_id": "os-000000031",
+  "memory_id": "os-31",
   "objective": "Complete the todo list",
   "task": "I must create a html+js game at outputs/",
   "thoughts": "I need to create a html+js game at outputs/. I will create a file named index.html as the main page and a js file named game.js to contain the game logic. I will also need to create a CSS file for styling the game elements. I will use the execution_agent tool to create the files and add the necessary content because my output length is too small. I will also need to use the openai_call tool to get some inspiration for the game logic and design.",
