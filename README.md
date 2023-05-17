@@ -117,9 +117,9 @@ To use the script, you will need to follow these steps:
 2. Copy the .env.example file to .env: `cp .env.example .env`. This is where you will set the following variables.
 3. Set your OpenAI key and model in the OPENAI_API_KEY, OPENAPI_API_MODEL variables.
 4. Set your OpenA in the OPENAI_API_KEY, OPENAPI_API_MODEL variables.
-6. Set the objective of the task management system in the OBJECTIVE variable. Alternatively you can pass it to the script as a quote argument.
+6. Set the objective of the task management system in the OBJECTIVE variable.
 ```
-python babyagi.py ["<objective>"]
+python main.py
 ```
 8. Set the task_list of the system in the TASK_LIST variable.
 9. Run the script.
@@ -132,12 +132,12 @@ TASK_LIST=['I must rickroll myself', 'I must close the tab in which I rickrolled
 
 ```
 OBJECTIVE=I need to complete the first task
-TASK_LIST=['I must analyze my cognitive archictecture during my chain of thoughts and then in my 'answer:' I will write 10 examples of multi_step_objective-first_task pairs to showcase my capabilities, I must append the result in the ./output2.txt file.']
+TASK_LIST=["I must analyze my cognitive archictecture during my chain of thoughts and then in my 'answer:' I will write 10 examples of multi_step_objective-first_task pairs to showcase my capabilities, I must append the result in the ./output2.txt file."]
 ```
 
 ```
 OBJECTIVE=Improve my prompts at ./prompts.py file
-TASK_LIST=['Plan what to do. I must create a initial end-to-end task list, which the final task will make my objective completed.']
+TASK_LIST=["Plan what to do. I must create a initial end-to-end task list, which the final task will make my objective completed."]
 ```
 
 ## Running in a container
