@@ -67,7 +67,7 @@ To use the script, you will need to follow these steps:
 4. Set your OpenA in the OPENAI_API_KEY, OPENAPI_API_MODEL variables.
 6. Set the objective of the task management system in the OBJECTIVE variable. Alternatively you can pass it to the script as a quote argument.
 ```
-python babyagi.py ["<objective>"]
+python src/main.py ["<objective>"]
 ```
 8. Set the task_list of the system in the TASK_LIST variable.
 9. Run the script.
@@ -103,7 +103,7 @@ I recommend using this script in a virtual machine and always making a backup if
 
 
 # Backstory
-BabyAGI is a pared-down version of the original [Task-Driven Autonomous Agent](https://twitter.com/yoheinakajima/status/1640934493489070080?s=20) (Mar 28, 2023, by @yoheynakajima)
+BabyAGI is a paired-down version of the original [Task-Driven Autonomous Agent](https://twitter.com/yoheinakajima/status/1640934493489070080?s=20) (Mar 28, 2023, by @yoheynakajima)
 
 
 BASI is a modified version of BabyAGI created to show how LLMs can perform in the real world.
