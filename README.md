@@ -2,12 +2,6 @@
  Babyagi, an Autonomous and Self-Improving agent: BASI
 </h1>
 
-# Last changes
-
-The main changes are that now you can easily enable/disable/add the execution_agent tools, you can choose the amount of n-shots the agent will receive in its prompt, if the agent will keep running in continuous mode even with the list of empty tasks, and pinecone and serp are not activated by default.
-
-This repository will soon be updated to be compatible with the latest commits from the original babyagi.
-
 
 # Objective
 This Python script is an example of a LLM-powered autonomous agent. The system uses OpenAI API to create and execute tasks.
