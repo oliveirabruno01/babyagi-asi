@@ -22,5 +22,9 @@
   "memory_agent": {
     "prompt": "- self.memory_agent(caller:str, content:str, goal:goal) - str or True if there's no return string. This agent can handle memory I/O and can create severals types of memories. Avoid using this;\n",
     "enabled": false
+  },
+  "get_parallel_search_result": {
+    "prompt": "- self.get_parallel_search_result(query: str) -> str: search the current web with Parallel and return excerpts with source links. Use a concise keyword query. No Parallel API key is required; service rate limits apply.",
+    "enabled": false
   }
 }
