@@ -185,3 +185,14 @@ class AutonomousAgent:
 
     def generate_large_text(self, instruction, max_tokens_lenghts=10000):
         return text_processing.generate_large_text(instruction, max_tokens_lenghts=10000)
+
+    def get_parallel_search_result(self, query: str) -> str:
+        if not prompts.tools["get_parallel_search_result"]["enabled"]:
+            raise RuntimeError("Enable get_parallel_search_result in tools/config.json first")
+
+        from tools.parallel_search import search
+        from uuid import uuid4
+
+        if not hasattr(self, "_parallel_search_session_id"):
+            self._parallel_search_session_id = str(uuid4())
+        return search(query, self._parallel_search_session_id)

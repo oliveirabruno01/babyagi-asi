@@ -41,6 +41,7 @@ execution_agent tools:
 - count_tokens
 - process_large_files
 - get_serp_query, disabled by default
+- get_parallel_search_result, disabled by default ([optional Parallel web search setup](docs/parallel-search.md))
 
 memory_agent tools:
 - openai_call

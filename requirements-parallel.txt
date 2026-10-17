@@ -1,0 +1,3 @@
+# Optional Parallel Search MCP tool (Python 3.11+, matching the Docker image).
+mcp==1.26.0
+httpx>=0.27.1,<1
